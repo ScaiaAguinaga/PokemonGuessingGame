@@ -1,77 +1,68 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function PokeGuesser() {
-  const [pokemonName, setPokemonName] = useState(`Venusaur`);
+  const [pokemonName, setPokemonName] = useState(``);
   const [sprite, setSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
 
-  // Handler for updating the pokemon name state
-  const handlePokemonName = (event) => {
-    setPokemonName(event.target.value);
+  // Generates a random pokemon name
+  const generateRandomPokemon = async () => {
+    const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0');
+    const data = await response.json();
+    const randomIndex = Math.floor(Math.random() * data.results.length);
+    setPokemonName(data.results[randomIndex].name);
   };
 
-  // Handler for updating the sprite image state
-  const handleSprite = (sprite) => {
-    setSprite(sprite);
-  };
+  // Generates the first random pokemon on page render
+  useEffect(() => {
+    generateRandomPokemon();
+  }, []);
 
-  // Handler for detecting Enter key press and fetching pokemon data
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      fetchPokemonData();
-    }
-  };
+  // Updates the pokemon information displayed whenever name is changed
+  useEffect(() => {
+    // Fetches data from PokeAPI using the user inputted Pokemon name
+    const fetchPokemonData = async () => {
+      try {
+        // Instantly return if pokemonName is empty
+        if (!pokemonName) return;
 
-  // Fetches data from PokeAPI using the user inputted Pokemon name
-  async function fetchPokemonData() {
-    try {
-      const pokemonUrlName = pokemonName.toLocaleLowerCase();
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonUrlName}`);
+        // Convert pokemonName to lowercase for API request
+        const pokemonUrlName = pokemonName.toLocaleLowerCase();
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonUrlName}`);
 
-      // If the response is not successful, throw a "Pokemon not found" error
-      if (!response.ok || pokemonName === '') {
-        // Clear sprite image when pokemon not found
-        setSprite(null);
-        throw new Error('Pokemon not found');
+        // If rejected, throw a "Pokemon not found" error
+        if (!response.ok) {
+          throw new Error('Pokemon not found');
+        }
+
+        // If resolved, parse it into a JavaScript object
+        const data = await response.json();
+        // Update displayed pokemon name
+        setPokemonName(pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1).toLowerCase());
+        // Update displayed pokemon sprite
+        setSprite(data.sprites.front_default);
+        // Update displayed pokemon types
+        setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
+      } catch (error) {
+        console.error(error);
       }
+    };
 
-      // If the response is successful, parse it into a JavaScript object
-      const data = await response.json();
-      updatePokemonDisplay(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  function updatePokemonDisplay(pokemonData) {
-    // Update displayed pokemon name
-    setPokemonName(pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1).toLowerCase());
-    // Update displayed pokemon sprite
-    handleSprite(pokemonData.sprites.front_default);
-    // Update displayed pokemon types
-    setPokemonTypes(pokemonData.types.map((typeIndex) => typeIndex.type.name));
-  }
+    fetchPokemonData();
+  }, [pokemonName]);
 
   return (
     <>
-      <img id="pokemon-sprite" src={sprite}></img>
-      <input
-        type="text"
-        value={pokemonName}
-        onChange={handlePokemonName}
-        onKeyDown={handleKeyDown}
-        placeholder="Pokemon Name"
-        className="m-2 flex border-2 border-black"
-      />
-      <button onClick={fetchPokemonData} className="m-2 flex border-2 border-black">
-        Fetch
-      </button>
-      <h1 className='flex'>
-        Types:
+      <img src={sprite} alt="Pokemon sprite"></img>
+      <h1>Name: {pokemonName}</h1>
+      <ul>
         {pokemonTypes.map((type, index) => (
-          <p key={index}>{type}</p>
+          <li key={index}>{type}</li>
         ))}
-      </h1>
+      </ul>
+      <button onClick={generateRandomPokemon} className="m-2 flex border-2 border-black">
+        Generate Name
+      </button>
     </>
   );
 }

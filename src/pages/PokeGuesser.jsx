@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 function PokeGuesser() {
-  const [pokemonName, setPokemonName] = useState(``);
+  const [pokemonName, setPokemonName] = useState(`Venusaur`);
   const [sprite, setSprite] = useState('');
+  const [pokemonTypes, setPokemonTypes] = useState([]);
 
   // Handler for updating the pokemon name state
   const handlePokemonName = (event) => {
@@ -36,12 +37,19 @@ function PokeGuesser() {
 
       // If the response is successful, parse it into a JavaScript object
       const data = await response.json();
-      // Update the displayed Pokemon sprite
-      handleSprite(data.sprites.front_default);
+      updatePokemonDisplay(data);
     } catch (error) {
-      // If an error occurs during the fetch or parsing, log the error to the console
       console.error(error);
     }
+  }
+
+  function updatePokemonDisplay(pokemonData) {
+    // Update displayed pokemon name
+    setPokemonName(pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1).toLowerCase());
+    // Update displayed pokemon sprite
+    handleSprite(pokemonData.sprites.front_default);
+    // Update displayed pokemon types
+    setPokemonTypes(pokemonData.types.map((typeIndex) => typeIndex.type.name));
   }
 
   return (
@@ -58,6 +66,12 @@ function PokeGuesser() {
       <button onClick={fetchPokemonData} className="m-2 flex border-2 border-black">
         Fetch
       </button>
+      <h1 className='flex'>
+        Types:
+        {pokemonTypes.map((type, index) => (
+          <p key={index}>{type}</p>
+        ))}
+      </h1>
     </>
   );
 }

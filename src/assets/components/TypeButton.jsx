@@ -47,7 +47,7 @@ function TypeButton({ typeName }) {
   return (
     <>
       <button onClick={logType} className={`h-28 w-28 rounded-[20px] p-4 bg-${typeName}`}>
-        <img src={imagePaths[typeName]} alt={typeName} className="fill-current text-black"></img>
+        <img src={imagePaths[typeName]} alt={typeName} />
       </button>
     </>
   );

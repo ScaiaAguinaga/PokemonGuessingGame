@@ -87,9 +87,9 @@ function PokeGuesser() {
         Generate Name
       </button>
 
-      <div className="grid-cols-6 gap-2 inline-grid">
+      <div className="inline-grid grid-cols-6 gap-2">
         {allTypes.map((type, index) => (
-          <TypeButton typeName={type} key={index} />
+          <TypeButton key={index} typeName={type} />
         ))}
       </div>
     </>

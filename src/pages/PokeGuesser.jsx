@@ -1,12 +1,35 @@
 import { useState, useEffect } from 'react';
 
+import TypeButton from '../assets/components/TypeButton';
+
 function PokeGuesser() {
   const [pokemonName, setPokemonName] = useState(``);
-  const [sprite, setSprite] = useState('');
+  const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
+  const allTypes = [
+    'normal',
+    'grass',
+    'fire',
+    'water',
+    'electric',
+    'ice',
+    'fighting',
+    'poison',
+    'ground',
+    'flying',
+    'psychic',
+    'bug',
+    'rock',
+    'ghost',
+    'dragon',
+    'dark',
+    'steel',
+    'fairy',
+  ];
 
   // Generates a random pokemon name
   const generateRandomPokemon = async () => {
+    // Fetches the names of the first 151 pokemon
     const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0');
     const data = await response.json();
     const randomIndex = Math.floor(Math.random() * data.results.length);
@@ -37,32 +60,38 @@ function PokeGuesser() {
 
         // If resolved, parse it into a JavaScript object
         const data = await response.json();
-        // Update displayed pokemon name
+        // Updates displayed pokemon data
         setPokemonName(pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1).toLowerCase());
-        // Update displayed pokemon sprite
-        setSprite(data.sprites.front_default);
-        // Update displayed pokemon types
+        setPokemonSprite(data.sprites.front_default);
         setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchPokemonData();
   }, [pokemonName]);
 
   return (
     <>
-      <img src={sprite} alt="Pokemon sprite"></img>
+      <img src={pokemonSprite} alt="Pokemon sprite"></img>
+
       <h1>Name: {pokemonName}</h1>
+
       <ul>
         {pokemonTypes.map((type, index) => (
           <li key={index}>{type}</li>
         ))}
       </ul>
+
       <button onClick={generateRandomPokemon} className="m-2 flex border-2 border-black">
         Generate Name
       </button>
+
+      <div className="grid-cols-6 gap-2 inline-grid">
+        {allTypes.map((type, index) => (
+          <TypeButton typeName={type} key={index} />
+        ))}
+      </div>
     </>
   );
 }

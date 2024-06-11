@@ -27,6 +27,10 @@ function PokeGuesser() {
     'fairy',
   ];
 
+  // FOR TESTING
+  const [answerText, setAnswerText] = useState('');
+  const [guessCount, setGuessCount] = useState(1);
+
   // Generates a random pokemon name
   const generateRandomPokemon = async () => {
     // Fetches the names of the first 151 pokemon
@@ -64,6 +68,7 @@ function PokeGuesser() {
         setPokemonName(pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1).toLowerCase());
         setPokemonSprite(data.sprites.front_default);
         setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
+        setGuessCount(pokemonTypes.length);
       } catch (error) {
         console.error(error);
       }
@@ -74,12 +79,21 @@ function PokeGuesser() {
   const handleTypeClick = (type) => {
     // console.log(pokemonTypes)
     if (type === pokemonTypes[0] || type === pokemonTypes[1]) {
-      console.log('correct!');
+      setAnswerText('Correct');
+      setTimeout(() => {
+        setAnswerText('');
+      }, 1500);
+      setGuessCount(guessCount - 1);
+      if (guessCount === 1) {
+        generateRandomPokemon();
+      }
     } else {
-      console.log('Incorrect...');
+      setAnswerText('Incorrect...');
+      setTimeout(() => {
+        setAnswerText('');
+      }, 1500);
+      generateRandomPokemon();
     }
-
-    generateRandomPokemon();
   };
 
   return (
@@ -88,21 +102,14 @@ function PokeGuesser() {
 
       <h1>Name: {pokemonName}</h1>
 
-      <ul>
-        {pokemonTypes.map((type, index) => (
-          <li key={index}>{type}</li>
-        ))}
-      </ul>
-
-      <button onClick={generateRandomPokemon} className="m-2 flex border-2 border-black">
-        Generate Name
-      </button>
-
+      {/* Renders a button for each pokemon type */}
       <div className="inline-grid grid-cols-6 gap-2">
         {allTypes.map((type, index) => (
           <TypeButton key={index} typeName={type} onClick={() => handleTypeClick(type)} />
         ))}
       </div>
+
+      <h1>{answerText}</h1>
     </>
   );
 }

@@ -71,6 +71,17 @@ function PokeGuesser() {
     fetchPokemonData();
   }, [pokemonName]);
 
+  const handleTypeClick = (type) => {
+    // console.log(pokemonTypes)
+    if (type === pokemonTypes[0] || type === pokemonTypes[1]) {
+      console.log('correct!');
+    } else {
+      console.log('Incorrect...');
+    }
+
+    generateRandomPokemon();
+  };
+
   return (
     <>
       <img src={pokemonSprite} alt="Pokemon sprite"></img>
@@ -89,7 +100,7 @@ function PokeGuesser() {
 
       <div className="inline-grid grid-cols-6 gap-2">
         {allTypes.map((type, index) => (
-          <TypeButton key={index} typeName={type} />
+          <TypeButton key={index} typeName={type} onClick={() => handleTypeClick(type)} />
         ))}
       </div>
     </>

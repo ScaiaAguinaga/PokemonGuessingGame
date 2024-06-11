@@ -39,15 +39,14 @@ const imagePaths = {
   water: water,
 };
 
-function TypeButton({ typeName }) {
-  function logType() {
-    console.log(typeName);
-  }
+function TypeButton({ typeName, onClick }) {
 
   return (
     <>
-      <button onClick={logType} className={`h-28 w-28 rounded-[20px] p-4 bg-${typeName}`}>
-        <img src={imagePaths[typeName]} alt={typeName} />
+      <button onClick={onClick} className={`h-12 w-12 rounded-[20px] p-4 bg-${typeName} text-${typeName}`}>
+        <div>
+          <img src={imagePaths[typeName]} alt={typeName} />
+        </div>
       </button>
     </>
   );

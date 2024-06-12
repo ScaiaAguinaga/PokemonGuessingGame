@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-
+import PokemonDisplay from '../assets/components/PokemonDisplay';
 import TypeButton from '../assets/components/TypeButton';
 
 function PokeGuesser() {
   const [pokemonName, setPokemonName] = useState(``);
+  const [pokemonId, setPokemonId] = useState(1);
   const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
   const allTypes = [
@@ -27,89 +28,64 @@ function PokeGuesser() {
     'fairy',
   ];
 
-  // FOR TESTING
-  const [answerText, setAnswerText] = useState('');
-  const [guessCount, setGuessCount] = useState(1);
-
-  // Generates a random pokemon name
-  const generateRandomPokemon = async () => {
-    // Fetches the names of the first 151 pokemon
-    const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0');
-    const data = await response.json();
-    const randomIndex = Math.floor(Math.random() * data.results.length);
-    setPokemonName(data.results[randomIndex].name);
+  // Generates a random Pokemon ID for a generation one pokemon
+  const generateRandomPokemon = () => {
+    setPokemonId(Math.floor(Math.random() * 151 + 1));
   };
 
-  // Generates the first random pokemon on page render
-  useEffect(() => {
-    generateRandomPokemon();
-  }, []);
+  // Updates state variables with fetched Pokemon data
+  const updatePokemonInfo = (data) => {
+    setPokemonName(data.name);
+    setPokemonSprite(data.sprites.front_default);
+    setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
+  };
 
-  // Updates the pokemon information displayed whenever name is changed
+  // Fetches Pokemon data from PokeAPI whenever pokemonId changes
   useEffect(() => {
-    // Fetches data from PokeAPI using the user inputted Pokemon name
     const fetchPokemonData = async () => {
       try {
-        // Instantly return if pokemonName is empty
-        if (!pokemonName) return;
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
 
-        // Convert pokemonName to lowercase for API request
-        const pokemonUrlName = pokemonName.toLocaleLowerCase();
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonUrlName}`);
-
-        // If rejected, throw a "Pokemon not found" error
+        // Throws error if promise is rejected
         if (!response.ok) {
           throw new Error('Pokemon not found');
         }
 
-        // If resolved, parse it into a JavaScript object
+        // Parses fetched data into a json object and calls update function
         const data = await response.json();
-        // Updates displayed pokemon data
-        setPokemonName(pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1).toLowerCase());
-        setPokemonSprite(data.sprites.front_default);
-        setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
-        setGuessCount(pokemonTypes.length);
+        updatePokemonInfo(data);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchPokemonData();
-  }, [pokemonName]);
 
-  const handleTypeClick = (type) => {
-    // console.log(pokemonTypes)
-    if (type === pokemonTypes[0] || type === pokemonTypes[1]) {
-      setAnswerText('Correct');
-      setTimeout(() => {
-        setAnswerText('');
-      }, 1500);
-      setGuessCount(guessCount - 1);
-      if (guessCount === 1) {
-        generateRandomPokemon();
-      }
-    } else {
-      setAnswerText('Incorrect...');
-      setTimeout(() => {
-        setAnswerText('');
-      }, 1500);
-      generateRandomPokemon();
-    }
-  };
+    fetchPokemonData();
+  }, [pokemonId]);
+
+  // Initializes a random pokemon ID when component mounts
+  useEffect(() => {
+    generateRandomPokemon();
+  }, []);
 
   return (
     <>
-      <img src={pokemonSprite} alt="Pokemon sprite"></img>
-
-      <h1>Name: {pokemonName}</h1>
-
-      {/* Renders a button for each pokemon type */}
-      <div className="inline-grid grid-cols-6 gap-2">
-        {allTypes.map((type, index) => (
-          <TypeButton key={index} typeName={type} onClick={() => handleTypeClick(type)} />
-        ))}
+      <div className="flex w-full justify-center">
+        <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
       </div>
-
-      <h1>{answerText}</h1>
+      <div className="flex w-full justify-center">
+        <div className="inline-grid grid-cols-6 justify-center gap-4">
+          {allTypes.map((type, index) => (
+            <TypeButton
+              key={index}
+              typeName={type}
+              onClick={() => {
+                generateRandomPokemon();
+                console.log(type);
+              }}
+            />
+          ))}
+        </div>
+      </div>
     </>
   );
 }

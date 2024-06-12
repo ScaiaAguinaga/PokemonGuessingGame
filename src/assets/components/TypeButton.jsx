@@ -40,10 +40,9 @@ const imagePaths = {
 };
 
 function TypeButton({ typeName, onClick }) {
-
   return (
     <>
-      <button onClick={onClick} className={`h-12 w-12 rounded-[20px] p-4 bg-${typeName} text-${typeName}`}>
+      <button onClick={onClick} className={`h-10 w-10 rounded-[20px] p-2 bg-${typeName} text-${typeName}`}>
         <div>
           <img src={imagePaths[typeName]} alt={typeName} />
         </div>

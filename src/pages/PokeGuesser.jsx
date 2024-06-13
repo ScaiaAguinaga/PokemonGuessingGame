@@ -7,6 +7,7 @@ function PokeGuesser() {
   const [pokemonId, setPokemonId] = useState(1);
   const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
+  const [guessCount, setGuessCount] = useState(1);
   const allTypes = [
     'normal',
     'grass',
@@ -28,16 +29,14 @@ function PokeGuesser() {
     'fairy',
   ];
 
+  // Initializes a random pokemon ID when component mounts
+  useEffect(() => {
+    generateRandomPokemon();
+  }, []);
+
   // Generates a random Pokemon ID for a generation one pokemon
   const generateRandomPokemon = () => {
     setPokemonId(Math.floor(Math.random() * 151 + 1));
-  };
-
-  // Updates state variables with fetched Pokemon data
-  const updatePokemonInfo = (data) => {
-    setPokemonName(data.name);
-    setPokemonSprite(data.sprites.front_default);
-    setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
   };
 
   // Fetches Pokemon data from PokeAPI whenever pokemonId changes
@@ -62,10 +61,34 @@ function PokeGuesser() {
     fetchPokemonData();
   }, [pokemonId]);
 
-  // Initializes a random pokemon ID when component mounts
-  useEffect(() => {
+  // Updates state variables with fetched Pokemon data
+  const updatePokemonInfo = (data) => {
+    setPokemonName(data.name.charAt(0).toUpperCase() + data.name.slice(1));
+    setPokemonSprite(data.sprites.front_default);
+    setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
+    setGuessCount(data.types.map((typeIndex) => typeIndex.type.name).length);
+  };
+
+  // Handles comparisons between user guess and Pokemon types
+  const handleGuess = (guessType) => {
+    let currentGuesses = guessCount;
+    // If user selection is correct, decrement counter
+    // If user selection is incorrect, call generateRandomPokemon
+    if (pokemonTypes.includes(guessType)) {
+      console.log(`${pokemonName} is a ${guessType} type!`);
+      currentGuesses -= 1;
+      setGuessCount(currentGuesses);
+
+      // If user still has more to guess skip generateRandomPokemon call
+      if (currentGuesses > 0) {
+        return;
+      }
+    } else {
+      console.log(`${pokemonName} is not a ${guessType} type!`);
+    }
+    // Generates new pokemon when either all information is correctly guessed or a singular incorrect guess is made.
     generateRandomPokemon();
-  }, []);
+  };
 
   return (
     <>
@@ -79,8 +102,7 @@ function PokeGuesser() {
               key={index}
               typeName={type}
               onClick={() => {
-                generateRandomPokemon();
-                console.log(type);
+                handleGuess(type);
               }}
             />
           ))}

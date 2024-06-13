@@ -79,6 +79,9 @@ function PokeGuesser() {
       currentGuesses -= 1;
       setGuessCount(currentGuesses);
 
+      // Remove correctly guessed type from pokemon array so it may not be selected again
+      setPokemonTypes(pokemonTypes.filter((pokemonType) => pokemonType !== guessType))
+
       // If user still has more to guess skip generateRandomPokemon call
       if (currentGuesses > 0) {
         return;

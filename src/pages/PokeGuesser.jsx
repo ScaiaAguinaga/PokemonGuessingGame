@@ -64,7 +64,7 @@ function PokeGuesser() {
   // Updates state variables with fetched Pokemon data
   const updatePokemonInfo = (data) => {
     setPokemonName(data.name.charAt(0).toUpperCase() + data.name.slice(1));
-    setPokemonSprite(data.sprites.front_default);
+    setPokemonSprite(data.sprites.other['official-artwork'].front_default);
     setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
     setGuessCount(data.types.map((typeIndex) => typeIndex.type.name).length);
   };
@@ -80,7 +80,7 @@ function PokeGuesser() {
       setGuessCount(currentGuesses);
 
       // Remove correctly guessed type from pokemon array so it may not be selected again
-      setPokemonTypes(pokemonTypes.filter((pokemonType) => pokemonType !== guessType))
+      setPokemonTypes(pokemonTypes.filter((pokemonType) => pokemonType !== guessType));
 
       // If user still has more to guess skip generateRandomPokemon call
       if (currentGuesses > 0) {
@@ -99,16 +99,32 @@ function PokeGuesser() {
         <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
       </div>
       <div className="flex w-full justify-center">
-        <div className="inline-grid grid-cols-6 justify-center gap-4">
-          {allTypes.map((type, index) => (
-            <TypeButton
-              key={index}
-              typeName={type}
-              onClick={() => {
-                handleGuess(type);
-              }}
-            />
-          ))}
+      </div>
+
+      {/* Styling for pokedex design */}
+      <div className="flex h-screen w-screen items-center justify-center">
+        <div className="grid h-[1000px] w-[1280px] grid-cols-2 gap-[30px]">
+          {/* Left Screen */}
+          <div className="bg-pokedex-red rounded-[20px] p-8">
+            <div className="bg-cream h-full w-full rounded-[20px]">
+              <div className="flex h-1/2"></div>
+              <div className="grid h-1/2 grid-cols-3 gap-4 border-2 border-black p-2">
+                {allTypes.map((type, index) => (
+                  <TypeButton
+                    key={index}
+                    typeName={type}
+                    onClick={() => {
+                      handleGuess(type);
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+          {/* Right screen */}
+          <div className="bg-pokedex-red rounded-[20px] p-8">
+            <div className="bg-cream h-full w-full rounded-[20px]"></div>
+          </div>
         </div>
       </div>
     </>

@@ -42,9 +42,10 @@ const imagePaths = {
 function TypeButton({ typeName, onClick }) {
   return (
     <>
-      <button onClick={onClick} className={`h-10 w-10 rounded-[20px] p-2 bg-${typeName} text-${typeName}`}>
-        <div>
-          <img src={imagePaths[typeName]} alt={typeName} />
+      <button onClick={onClick} className={`flex rounded-[20px] p-2 bg-${typeName} text-${typeName}`}>
+        <div className="grid grid-cols-4">
+          <img src={imagePaths[typeName]} alt={typeName} className="h-10 w-10" />
+          <p className="col-span-3 flex items-center justify-center text-2xl text-white font-bold">{typeName}</p>
         </div>
       </button>
     </>

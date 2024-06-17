@@ -8,6 +8,7 @@ function PokeGuesser() {
   const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
   const [PokemonTypesDisplay, setPokemonTypesDisplay] = useState([]);
+  const [pokemonData, setPokemonData] = useState(null);
   const [guessCount, setGuessCount] = useState(1);
   const allTypes = [
     'normal',
@@ -64,6 +65,7 @@ function PokeGuesser() {
 
   // Updates state variables with fetched Pokemon data
   const updatePokemonInfo = (data) => {
+    setPokemonData(data);
     setPokemonName(data.name.charAt(0).toUpperCase() + data.name.slice(1));
     setPokemonSprite(data.sprites.other['official-artwork'].front_default);
     setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
@@ -101,8 +103,8 @@ function PokeGuesser() {
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="grid h-[1000px] w-[1280px] grid-cols-2 gap-[30px]">
           {/* Left Screen */}
-          <div className="bg-pokedex-red rounded-[20px] p-6">
-            <div className="bg-cream h-full w-full rounded-[20px] p-4">
+          <div className="rounded-[20px] bg-pokedex-red p-6">
+            <div className="h-full w-full rounded-[20px] bg-cream px-4 py-6">
               <div className="flex h-1/2"></div>
               <div className="grid h-1/2 grid-cols-3 gap-4">
                 {allTypes.map((type, index) => (
@@ -118,14 +120,18 @@ function PokeGuesser() {
             </div>
           </div>
           {/* Right screen */}
-          <div className="bg-pokedex-red rounded-[20px] p-6">
-            <div className="bg-cream flex h-full w-full flex-col rounded-[20px] p-4">
-              <div className="h-1/2 justify-center">
+          <div className="rounded-[20px] bg-pokedex-red p-6">
+            <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
+              <div className="flex flex-col items-center">
                 <h1 className="mb-6 mt-2 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and types*/}
-                <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={PokemonTypesDisplay} />
+                <PokemonDisplay
+                  pokemonName={pokemonName}
+                  pokemonSprite={pokemonSprite}
+                  pokemonTypes={PokemonTypesDisplay}
+                  pokemonData={pokemonData}
+                />
               </div>
-              <div className="h-1/2 flex-grow bg-green-500"></div>
             </div>
           </div>
         </div>

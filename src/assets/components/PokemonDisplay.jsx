@@ -16,7 +16,10 @@ const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes, pokemonData 
       </div>
       <div className="grid w-full grid-cols-4 gap-4">
         <div className="col-span-4 flex items-center justify-center rounded-[20px] border-4 border-black p-2 text-3xl">
-          <span className="font-bold">Abilities:</span> {pokemonData === null ? 'Loading...' : "pokemonData.abilities.ability.name"}
+          <span className="font-bold">Abilities:</span>{' '}
+          {pokemonData === null
+            ? 'Loading...'
+            : pokemonData.abilities.map((abilityIndex) => abilityIndex.ability.name).join(`, `)}
         </div>
         <div className="col-span-2 flex items-center justify-center rounded-[20px] border-4 border-black p-2 text-3xl">
           <span className="font-bold">Ht: </span> {pokemonData === null ? 'Loading...' : pokemonData.height}

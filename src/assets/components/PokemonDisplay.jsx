@@ -1,16 +1,19 @@
+import TypeButton from './TypeButton';
+
 const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes }) => {
+  
   return (
     <>
-      <div className="grid grid-cols-2">
-        <img src={pokemonSprite} className="w-32 items-center justify-center"></img>
-        <div className="flex flex-col items-center justify-center text-center">
-          <h1>{pokemonName}</h1>
-          <ul>
-            {pokemonTypes.map((pokemonType, index) => (
-              <li key={index}>{pokemonType}</li>
-            ))}
-          </ul>
-        </div>
+      <div className="m-auto flex h-[250px] w-[400px] justify-center rounded-[20px] border-4 border-black p-6 align-middle">
+        <img src={pokemonSprite}></img>
+      </div>
+      <h2 className="my-3 text-center text-4xl">{pokemonName}</h2>
+      <div className="flex w-full items-center justify-center">
+        {pokemonTypes.map((type, index) => (
+          <div key={index} className="mx-2">
+            <TypeButton typeName={type} />
+          </div>
+        ))}
       </div>
     </>
   );

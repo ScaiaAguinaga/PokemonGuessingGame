@@ -7,6 +7,7 @@ function PokeGuesser() {
   const [pokemonId, setPokemonId] = useState(1);
   const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
+  const [PokemonTypesDisplay, setPokemonTypesDisplay] = useState([]);
   const [guessCount, setGuessCount] = useState(1);
   const allTypes = [
     'normal',
@@ -66,6 +67,7 @@ function PokeGuesser() {
     setPokemonName(data.name.charAt(0).toUpperCase() + data.name.slice(1));
     setPokemonSprite(data.sprites.other['official-artwork'].front_default);
     setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
+    setPokemonTypesDisplay(data.types.map((typeIndex) => typeIndex.type.name));
     setGuessCount(data.types.map((typeIndex) => typeIndex.type.name).length);
   };
 
@@ -95,20 +97,14 @@ function PokeGuesser() {
 
   return (
     <>
-      <div className="flex w-full justify-center">
-        <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
-      </div>
-      <div className="flex w-full justify-center">
-      </div>
-
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="grid h-[1000px] w-[1280px] grid-cols-2 gap-[30px]">
           {/* Left Screen */}
-          <div className="bg-pokedex-red rounded-[20px] p-8">
-            <div className="bg-cream h-full w-full rounded-[20px]">
+          <div className="bg-pokedex-red rounded-[20px] p-6">
+            <div className="bg-cream h-full w-full rounded-[20px] p-4">
               <div className="flex h-1/2"></div>
-              <div className="grid h-1/2 grid-cols-3 gap-4 border-2 border-black p-2">
+              <div className="grid h-1/2 grid-cols-3 gap-4">
                 {allTypes.map((type, index) => (
                   <TypeButton
                     key={index}
@@ -122,8 +118,15 @@ function PokeGuesser() {
             </div>
           </div>
           {/* Right screen */}
-          <div className="bg-pokedex-red rounded-[20px] p-8">
-            <div className="bg-cream h-full w-full rounded-[20px]"></div>
+          <div className="bg-pokedex-red rounded-[20px] p-6">
+            <div className="bg-cream flex h-full w-full flex-col rounded-[20px] p-4">
+              <div className="h-1/2 justify-center">
+                <h1 className="mb-6 mt-2 text-center text-5xl font-bold">POKÉDEX</h1>
+                {/* Displays Pokemon image and types*/}
+                <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={PokemonTypesDisplay} />
+              </div>
+              <div className="h-1/2 flex-grow bg-green-500"></div>
+            </div>
           </div>
         </div>
       </div>

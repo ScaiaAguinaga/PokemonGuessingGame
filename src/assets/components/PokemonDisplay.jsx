@@ -1,33 +1,23 @@
-import TypeButton from './TypeButton';
+import TypeGuessSlot from './TypeGuessSlot';
 
-const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes, pokemonData }) => {
+const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes }) => {
   return (
     <>
-      <div className="flex h-[250px] w-[400px] justify-center rounded-[20px] border-4 border-black p-6 align-middle">
-        <img src={pokemonSprite} className="h-full"></img>
-      </div>
-      <h2 className="my-5 flex justify-center text-center text-4xl">{pokemonName}</h2>
-      <div className="mb-5 flex w-full items-center justify-center">
-        {pokemonTypes.map((type, index) => (
-          <div key={index} className="mx-2">
-            <TypeButton typeName={type} cursorType="cursor-default" />
-          </div>
-        ))}
-      </div>
-      <div className="grid w-full grid-cols-4 gap-4">
-        <div className="col-span-4 flex items-center justify-center rounded-[20px] border-4 border-black p-2 text-3xl">
-          <span className="font-bold">Abilities:</span>{' '}
-          {pokemonData === null
-            ? 'Loading...'
-            : pokemonData.abilities.map((abilityIndex) => abilityIndex.ability.name).join(`, `)}
+      <div className="flex flex-col items-center">
+        {/* Displays pokemon sprite in a rounded border box */}
+        <div className="flex h-[250px] w-[400px] justify-center rounded-[20px] border-4 border-black p-4 align-middle">
+          <img src={pokemonSprite} className="h-full"></img>
         </div>
-        <div className="col-span-2 flex items-center justify-center rounded-[20px] border-4 border-black p-2 text-3xl">
-          <span className="font-bold">Ht: </span> {pokemonData === null ? 'Loading...' : pokemonData.height}
+        {/* Displays pokemon name */}
+        <h2 className="mt-4 mb-6 text-center text-4xl">{pokemonName}</h2>
+        {/* Displays drop area for pokemon type guesses */}
+        <div className="grid grid-flow-col gap-4">
+          {pokemonTypes.map((type, index) => (
+            <div key={index}>
+              <TypeGuessSlot />
+            </div>
+          ))}
         </div>
-        <div className="col-span-2 flex items-center justify-center rounded-[20px] border-4 border-black p-2 text-3xl">
-          <span className="font-bold">Wt:</span> {pokemonData === null ? 'Loading...' : pokemonData.weight}
-        </div>
-        <div className="col-span-3 flex items-center justify-center rounded-[20px] border-4 border-black"></div>
       </div>
     </>
   );

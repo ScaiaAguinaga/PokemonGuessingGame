@@ -1,4 +1,4 @@
-import TypeGuessSlot from './TypeGuessSlot';
+import TypeButton from './TypeButton';
 
 const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes }) => {
   return (
@@ -14,7 +14,7 @@ const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes }) => {
         <div className="grid grid-flow-col gap-4">
           {pokemonTypes.map((type, index) => (
             <div key={index}>
-              <TypeGuessSlot />
+              <TypeButton typeName={type}/>
             </div>
           ))}
         </div>

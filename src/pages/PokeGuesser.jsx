@@ -3,13 +3,13 @@ import PokemonDisplay from '../assets/components/PokemonDisplay';
 import TypeButton from '../assets/components/TypeButton';
 
 function PokeGuesser() {
+  // Pokemon Info
   const [pokemonId, setPokemonId] = useState(1);
-  const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonName, setPokemonName] = useState(``);
-  const [pokemonTypes, setPokemonTypes] = useState([]); // Used to determine which guesses are left
-  const [userTypeGuess, setUserTypeGuess] = useState([]);
-  const [PokemonTypesDisplay, setPokemonTypesDisplay] = useState([]); // Purely for display
+  const [pokemonSprite, setPokemonSprite] = useState('');
+  const [pokemonTypes, setPokemonTypes] = useState([]);
   const [guessCount, setGuessCount] = useState(1);
+
   const allTypes = [
     'normal',
     'grass',
@@ -68,7 +68,6 @@ function PokeGuesser() {
     setPokemonName(data.name.charAt(0).toUpperCase() + data.name.slice(1));
     setPokemonSprite(data.sprites.other['official-artwork'].front_default);
     setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
-    setPokemonTypesDisplay(data.types.map((typeIndex) => typeIndex.type.name));
     setGuessCount(data.types.map((typeIndex) => typeIndex.type.name).length);
   };
 
@@ -108,7 +107,7 @@ function PokeGuesser() {
               <div className="flex h-full w-full flex-col rounded-[20px]">
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and user input areas*/}
-                <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={PokemonTypesDisplay} />
+                <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
                 {/* Displays all Pokemon types for user guesses */}
                 <div className="flex flex-grow items-end justify-center">
                   <div className="grid max-h-[420px] grid-cols-3 gap-4">

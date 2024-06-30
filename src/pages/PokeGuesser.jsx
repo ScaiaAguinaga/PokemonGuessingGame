@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PokemonDisplay from '../assets/components/PokemonDisplay';
-import TypeButton from '../assets/components/TypeButton';
+import TypeButtons from '../assets/components/TypeButtons';
+import UserSubmit from '../assets/components/UserSubmit';
 
 function PokeGuesser() {
   // Pokemon Info
@@ -9,27 +10,6 @@ function PokeGuesser() {
   const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
   const [guessCount, setGuessCount] = useState(1);
-
-  const allTypes = [
-    'normal',
-    'grass',
-    'fire',
-    'water',
-    'electric',
-    'ice',
-    'fighting',
-    'poison',
-    'ground',
-    'flying',
-    'psychic',
-    'bug',
-    'rock',
-    'ghost',
-    'dragon',
-    'dark',
-    'steel',
-    'fairy',
-  ];
 
   // Initializes a random pokemon ID when component mounts
   useEffect(() => {
@@ -108,20 +88,10 @@ function PokeGuesser() {
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
+                {/*  */}
+                <UserSubmit/>
                 {/* Displays all Pokemon types for user guesses */}
-                <div className="flex flex-grow items-end justify-center">
-                  <div className="grid max-h-[420px] grid-cols-3 gap-4">
-                    {allTypes.map((type, index) => (
-                      <TypeButton
-                        key={index}
-                        typeName={type}
-                        onClick={() => {
-                          handleGuess(type);
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
+                <TypeButtons onClick={handleGuess} />
               </div>
             </div>
           </div>

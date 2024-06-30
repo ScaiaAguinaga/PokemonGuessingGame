@@ -1,6 +1,4 @@
-import TypeButton from './TypeButton';
-
-const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes }) => {
+const PokemonDisplay = ({ pokemonName, pokemonSprite }) => {
   return (
     <>
       <div className="flex flex-col items-center">
@@ -9,15 +7,7 @@ const PokemonDisplay = ({ pokemonName, pokemonSprite, pokemonTypes }) => {
           <img src={pokemonSprite} className="h-full"></img>
         </div>
         {/* Displays pokemon name */}
-        <h2 className="mt-4 mb-6 text-center text-4xl">{pokemonName}</h2>
-        {/* Displays drop area for pokemon type guesses */}
-        <div className="grid grid-flow-col gap-4">
-          {pokemonTypes.map((type, index) => (
-            <div key={index}>
-              <TypeButton typeName={type}/>
-            </div>
-          ))}
-        </div>
+        <h2 className="mt-4 text-center text-4xl">{pokemonName}</h2>
       </div>
     </>
   );

@@ -39,21 +39,45 @@ const imagePaths = {
   water: water,
 };
 
-function TypeButton({ typeName = '???', onClick, cursorType = 'cursor-pointer' }) {
+const allTypes = [
+  'normal',
+  'grass',
+  'fire',
+  'water',
+  'electric',
+  'ice',
+  'fighting',
+  'poison',
+  'ground',
+  'flying',
+  'psychic',
+  'bug',
+  'rock',
+  'ghost',
+  'dragon',
+  'dark',
+  'steel',
+  'fairy',
+];
+
+function TypeButton({ onClick }) {
+  const formatTypeName = (type) => type.charAt(0).toUpperCase() + type.slice(1);
+
   return (
-    <>
-      <button
-        onClick={onClick}
-        className={`flex w-[165px] h-[56px] items-center rounded-[20px] px-3 py-2 bg-${typeName} ${cursorType}`}
-      >
-        <div className="flex w-full items-center">
-          <img src={imagePaths[typeName]} alt={typeName} className="h-10 w-10" />
-          <p className="flex-grow text-center text-2xl font-bold text-white">
-            {typeName.charAt(0).toUpperCase() + typeName.slice(1)}
-          </p>
-        </div>
-      </button>
-    </>
+    <div className="grid grid-cols-3 gap-4">
+      {allTypes.map((type, index) => (
+        <button
+          key={index}
+          onClick={() => onClick(type)}
+          className={`flex h-[56px] w-[165px] items-center rounded-[20px] px-3 py-2 bg-${type}`}
+        >
+          <div className="flex w-full items-center">
+            <img src={imagePaths[type]} alt={type} className="h-10 w-10" />
+            <h2 className="flex-grow text-center text-2xl font-bold text-white">{formatTypeName(type)}</h2>
+          </div>
+        </button>
+      ))}
+    </div>
   );
 }
 

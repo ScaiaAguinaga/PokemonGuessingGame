@@ -89,7 +89,7 @@ function PokeGuesser() {
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
                 {/*  */}
-                <UserSubmit/>
+                <UserSubmit />
                 {/* Displays all Pokemon types for user guesses */}
                 <TypeButtons onClick={handleGuess} />
               </div>

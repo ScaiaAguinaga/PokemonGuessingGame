@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PokemonDisplay from '../assets/components/PokemonDisplay';
 import TypeButtons from '../assets/components/TypeButtons';
 import UserSubmit from '../assets/components/UserSubmit';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 function PokeGuesser() {
   // Pokemon Info
@@ -9,7 +10,10 @@ function PokeGuesser() {
   const [pokemonName, setPokemonName] = useState(``);
   const [pokemonSprite, setPokemonSprite] = useState('');
   const [pokemonTypes, setPokemonTypes] = useState([]);
+
+  // User related variables
   const [guessCount, setGuessCount] = useState(1);
+  const [userAnswer, setUserAnswer] = useState(['normal']);
 
   // Initializes a random pokemon ID when component mounts
   useEffect(() => {
@@ -29,6 +33,7 @@ function PokeGuesser() {
 
         // Throws error if promise is rejected
         if (!response.ok) {
+          setPokemonId(1); // Temporary fix for rejected promises
           throw new Error('Pokemon not found');
         }
 
@@ -75,6 +80,12 @@ function PokeGuesser() {
     generateRandomPokemon();
   };
 
+  const handleOnDragEnd = (result) => {
+    console.log(result)
+
+    
+  }
+
   return (
     <>
       {/* Styling for pokedex design */}
@@ -88,16 +99,26 @@ function PokeGuesser() {
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
-                {/*  */}
-                <UserSubmit/>
-                {/* Displays all Pokemon types for user guesses */}
-                <TypeButtons onClick={handleGuess} />
+                {/* Drop context for zone where users can drag and drop their answers */}
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  {/* Droppable zone to submit your guess */}
+                  <UserSubmit userAnswer={userAnswer} setUserAnswer={setUserAnswer} />
+                  {/* Displays all Pokemon types for user guesses */}
+                  <TypeButtons onClick={handleGuess} />
+                </DragDropContext>
               </div>
             </div>
           </div>
           {/* Right panel */}
           <div className="rounded-[20px] bg-pokedex-red p-6">
-            <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6"></div>
+            <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
+              {/* Showcase answers for development only */}
+              <ul>
+                {pokemonTypes.map((type, index) => (
+                  <li key={index}>{type}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

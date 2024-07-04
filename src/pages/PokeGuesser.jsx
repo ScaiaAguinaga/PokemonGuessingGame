@@ -3,6 +3,8 @@ import PokemonDisplay from '../assets/components/PokemonDisplay';
 import TypeButtons from '../assets/components/TypeButtons';
 import UserSubmit from '../assets/components/UserSubmit';
 
+import { DndContext } from '@dnd-kit/core';
+
 function PokeGuesser() {
   // Pokemon Info
   const [pokemonId, setPokemonId] = useState(1);
@@ -12,7 +14,7 @@ function PokeGuesser() {
 
   // User related variables
   const [guessCount, setGuessCount] = useState(1);
-  const [userAnswer, setUserAnswer] = useState(['normal']);
+  const [userAnswer, setUserAnswer] = useState([]);
 
   // Initializes a random pokemon ID when component mounts
   useEffect(() => {
@@ -79,14 +81,18 @@ function PokeGuesser() {
     generateRandomPokemon();
   };
 
-  // Handles adding and removing types from user answer when drag and dropping
-  // const handleOnDragEnd = (result) => {
-  //   console.log(result);
-  //   if (result.destination.droppableId === 'types-grid') {
-  //     console.log('type added');
-  //     setUserAnswer((userAnswer) => [...userAnswer, result.draggableId]);
-  //   }
-  // };
+  // Adds and removes types from user answer on drag end
+  const handleDragEnd = (event) => {
+    console.log(event);
+    // If user drops pokemon typing in answer zone appen that type to their answer
+    if (event.over.id === 'user-submit' && userAnswer.length < 2 && !userAnswer.includes(event.active.data.current)) {
+      setUserAnswer((userAnswer) => [...userAnswer, event.active.data.current]);
+    }
+    // If user drops pokemon typing in type buttons zone remove type from their answer
+    if (event.over.id === 'type-buttons') {
+      setUserAnswer(userAnswer.filter((answerType) => answerType !== event.active.data.current));
+    }
+  };
 
   return (
     <>
@@ -101,10 +107,13 @@ function PokeGuesser() {
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
-                {/* Droppable zone to submit your guess */}
-                <UserSubmit userAnswer={userAnswer} setUserAnswer={setUserAnswer} />
-                {/* Displays all Pokemon types for user guesses */}
-                <TypeButtons onClick={handleGuess} />
+                {/* Context for draf and dropping between answer zone and choice zone */}
+                <DndContext onDragEnd={handleDragEnd}>
+                  {/* Droppable zone to submit your guess */}
+                  <UserSubmit userAnswer={userAnswer} setUserAnswer={setUserAnswer} />
+                  {/* Displays all Pokemon types for user guesses */}
+                  <TypeButtons onClick={handleGuess} />
+                </DndContext>
               </div>
             </div>
           </div>
@@ -112,9 +121,21 @@ function PokeGuesser() {
           <div className="rounded-[20px] bg-pokedex-red p-6">
             <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
               {/* Showcase answers for development only */}
+              <h1 className="text-xl font-bold">CURRENT POKEMON TYPES</h1>
               <ul>
                 {pokemonTypes.map((type, index) => (
-                  <li key={index}>{type}</li>
+                  <li className="text-xl" key={index}>
+                    {type}
+                  </li>
+                ))}
+              </ul>
+
+              <h1 className="text-xl font-bold">CURRENT USER GUESSES</h1>
+              <ul>
+                {userAnswer.map((type, index) => (
+                  <li className="text-xl" key={index}>
+                    {type}
+                  </li>
                 ))}
               </ul>
             </div>

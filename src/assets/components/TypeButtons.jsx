@@ -1,3 +1,4 @@
+import { useDroppable } from '@dnd-kit/core';
 import TypeCard from './TypeCard';
 
 const allPokemonTypes = [
@@ -22,8 +23,12 @@ const allPokemonTypes = [
 ];
 
 function TypeButtons({ onClick }) {
+  const { setNodeRef } = useDroppable({
+    id: 'type-buttons',
+  });
+
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div ref={setNodeRef} className="grid grid-cols-3 gap-4">
       {allPokemonTypes.map((type, index) => (
         <button key={index} onClick={() => onClick(type)}>
           <TypeCard type={type} />

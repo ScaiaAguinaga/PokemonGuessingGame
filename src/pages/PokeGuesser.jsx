@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import PokemonDisplay from '../assets/components/PokemonDisplay';
 import TypeButtons from '../assets/components/TypeButtons';
 import UserSubmit from '../assets/components/UserSubmit';
-import { DragDropContext } from 'react-beautiful-dnd';
 
 function PokeGuesser() {
   // Pokemon Info
@@ -80,11 +79,14 @@ function PokeGuesser() {
     generateRandomPokemon();
   };
 
-  const handleOnDragEnd = (result) => {
-    console.log(result)
-
-    
-  }
+  // Handles adding and removing types from user answer when drag and dropping
+  // const handleOnDragEnd = (result) => {
+  //   console.log(result);
+  //   if (result.destination.droppableId === 'types-grid') {
+  //     console.log('type added');
+  //     setUserAnswer((userAnswer) => [...userAnswer, result.draggableId]);
+  //   }
+  // };
 
   return (
     <>
@@ -99,13 +101,10 @@ function PokeGuesser() {
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
-                {/* Drop context for zone where users can drag and drop their answers */}
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                  {/* Droppable zone to submit your guess */}
-                  <UserSubmit userAnswer={userAnswer} setUserAnswer={setUserAnswer} />
-                  {/* Displays all Pokemon types for user guesses */}
-                  <TypeButtons onClick={handleGuess} />
-                </DragDropContext>
+                {/* Droppable zone to submit your guess */}
+                <UserSubmit userAnswer={userAnswer} setUserAnswer={setUserAnswer} />
+                {/* Displays all Pokemon types for user guesses */}
+                <TypeButtons onClick={handleGuess} />
               </div>
             </div>
           </div>

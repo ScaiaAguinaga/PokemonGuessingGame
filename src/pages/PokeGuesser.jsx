@@ -57,7 +57,7 @@ function PokeGuesser() {
 
   // Adds and removes types from user answer on drag end
   const handleDragEnd = (event) => {
-    console.log(event);
+    // console.log(event);
     // If user drops pokemon typing in answer zone appen that type to their answer
     if (event.over.id === 'user-submit' && userAnswer.length < 2 && !userAnswer.includes(event.active.data.current)) {
       setUserAnswer((userAnswer) => [...userAnswer, event.active.data.current]);

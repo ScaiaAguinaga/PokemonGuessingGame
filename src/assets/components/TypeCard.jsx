@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 
-function TypeCard({ type, source }) {
+function TypeCard({ type, source, onClick }) {
   const allTypes = [
     { id: 1, name: `normal`, path: 'src/assets/images/normal.svg' },
     { id: 2, name: `grass`, path: 'src/assets/images/grass.svg' },
@@ -22,21 +22,19 @@ function TypeCard({ type, source }) {
     { id: 18, name: `fairy`, path: 'src/assets/images/fairy.svg' },
   ];
 
-  // Connects this instance of type card to the row matching the type name in the all types list above
   const selectedType = allTypes.find((t) => t.name === type);
-
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    // Separates ids of answers and type buttons so they drag seperately
     id: source === 'submit-zone' ? selectedType.id : `${type}`,
     data: `${type}`,
   });
 
-  // Visually moves type cards when dragging
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       }
     : undefined;
+
+  const formatTypeName = (type) => type.charAt(0).toUpperCase() + type.slice(1);
 
   return (
     <div
@@ -44,13 +42,12 @@ function TypeCard({ type, source }) {
       style={style}
       {...listeners}
       {...attributes}
+      onClick={() => onClick(type)}
       className={`flex h-[56px] w-[165px] items-center rounded-[20px] px-3 py-2 bg-${selectedType.name}`}
     >
       <div className="flex w-full items-center">
         <img src={selectedType.path} alt={selectedType.name} className="h-10 w-10" />
-        <h2 className="flex-grow text-center text-2xl font-bold text-white">
-          {selectedType.name.charAt(0).toUpperCase() + selectedType.name.slice(1)}
-        </h2>
+        <h2 className="flex-grow text-center text-2xl font-bold text-white">{formatTypeName(selectedType.name)}</h2>
       </div>
     </div>
   );

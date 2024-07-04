@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 
-function TypeCard({ type, source, onClick }) {
+function TypeCard({ type, source }) {
   const allTypes = [
     { id: 1, name: `normal`, path: 'src/assets/images/normal.svg' },
     { id: 2, name: `grass`, path: 'src/assets/images/grass.svg' },
@@ -24,8 +24,8 @@ function TypeCard({ type, source, onClick }) {
 
   const selectedType = allTypes.find((t) => t.name === type);
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: source === 'submit-zone' ? selectedType.id : `${type}`,
-    data: `${type}`,
+    id: source === 'user-submit' ? `ans-${type}` : `${type}`,
+    data: source === 'user-submit' ? 'user-submit' : 'type-buttons',
   });
 
   const style = transform
@@ -42,7 +42,6 @@ function TypeCard({ type, source, onClick }) {
       style={style}
       {...listeners}
       {...attributes}
-      onClick={() => onClick(type)}
       className={`flex h-[56px] w-[165px] items-center rounded-[20px] px-3 py-2 bg-${selectedType.name}`}
     >
       <div className="flex w-full items-center">

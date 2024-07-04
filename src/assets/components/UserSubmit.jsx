@@ -19,7 +19,7 @@ function UserSubmit({ userAnswer }) {
         ) : null}
 
         {userAnswer.map((type, index) => (
-          <TypeCard key={index} type={type} source="submit-zone" />
+          <TypeCard key={index} type={type} source="user-submit" />
         ))}
       </div>
     </div>

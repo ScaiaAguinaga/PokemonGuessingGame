@@ -57,22 +57,15 @@ function PokeGuesser() {
 
   // Adds and removes types from user answer on drag end
   const handleDragEnd = (event) => {
-    // console.log(event);
-    // If user drops pokemon typing in answer zone appen that type to their answer
-    if (event.over.id === 'user-submit' && userAnswer.length < 2 && !userAnswer.includes(event.active.data.current)) {
-      setUserAnswer((userAnswer) => [...userAnswer, event.active.data.current]);
+    // If dropped in user-submit and from type-buttons add type to useranswer
+    if (event.over.id === 'user-submit' && event.active.data.current === 'type-buttons') {
+      // Checks if type is already in userAnswer
+      if (userAnswer.length < 2 && !userAnswer.includes(event.active.id))
+        setUserAnswer((userAnswer) => [...userAnswer, event.active.id]);
     }
-    // If user drops pokemon typing in type buttons zone remove type from their answer
-    if (event.over.id === 'type-buttons') {
-      setUserAnswer(userAnswer.filter((answerType) => answerType !== event.active.data.current));
-    }
-  };
-
-  const handleTypeButtonClick = (type) => {
-    if (userAnswer.includes(type)) {
-      console.log('Already includes');
-    } else {
-      setUserAnswer((userAnswer) => [...userAnswer, type]);
+    // If dropped in type-buttons and from user-submit remove type from userAnswer
+    if (event.over.id === 'type-buttons' && event.active.data.current === 'user-submit') {
+      setUserAnswer(userAnswer.filter((answerType) => answerType !== event.active.id.slice(4)));
     }
   };
 
@@ -116,7 +109,7 @@ function PokeGuesser() {
                   {/* Droppable zone to submit your guess */}
                   <UserSubmit userAnswer={userAnswer} />
                   {/* Displays all Pokemon types for user guesses */}
-                  <TypeButtons onClick={handleTypeButtonClick} />
+                  <TypeButtons />
                 </DndContext>
               </div>
             </div>

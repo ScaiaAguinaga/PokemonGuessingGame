@@ -22,7 +22,7 @@ const allPokemonTypes = [
   'fairy',
 ];
 
-function TypeButtons({ onClick }) {
+function TypeButtons() {
   const { setNodeRef } = useDroppable({
     id: 'type-buttons',
   });
@@ -30,7 +30,7 @@ function TypeButtons({ onClick }) {
   return (
     <div ref={setNodeRef} className="grid grid-cols-3 gap-4">
       {allPokemonTypes.map((type, index) => (
-        <button key={index} onClick={() => onClick(type)}>
+        <button key={index}>
           <TypeCard type={type} />
         </button>
       ))}

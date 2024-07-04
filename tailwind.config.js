@@ -43,7 +43,7 @@ export default {
         steel: '#B8B8D0',
         fairy: '#F0B6BC',
         'pokedex-red': '#F62B1E',
-        cream: "#FCE8C6"
+        cream: '#FCE8C6',
       },
     },
   },

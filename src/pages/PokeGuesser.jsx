@@ -13,7 +13,6 @@ function PokeGuesser() {
   const [pokemonTypes, setPokemonTypes] = useState([]);
 
   // User related variables
-  const [guessCount, setGuessCount] = useState(1);
   const [userAnswer, setUserAnswer] = useState([]);
 
   // Initializes a random pokemon ID when component mounts
@@ -54,31 +53,6 @@ function PokeGuesser() {
     setPokemonName(data.name.charAt(0).toUpperCase() + data.name.slice(1));
     setPokemonSprite(data.sprites.other['official-artwork'].front_default);
     setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
-    setGuessCount(data.types.map((typeIndex) => typeIndex.type.name).length);
-  };
-
-  // Handles comparisons between user guess and Pokemon types
-  const handleGuess = (guessType) => {
-    let currentGuesses = guessCount;
-    // If user selection is correct, decrement counter
-    // If user selection is incorrect, call generateRandomPokemon
-    if (pokemonTypes.includes(guessType)) {
-      console.log(`${pokemonName} is a ${guessType} type!`);
-      currentGuesses -= 1;
-      setGuessCount(currentGuesses);
-
-      // Remove correctly guessed type from pokemon array so it may not be selected again
-      setPokemonTypes(pokemonTypes.filter((pokemonType) => pokemonType !== guessType));
-
-      // If user still has more to guess skip generateRandomPokemon call
-      if (currentGuesses > 0) {
-        return;
-      }
-    } else {
-      console.log(`${pokemonName} is not a ${guessType} type!`);
-    }
-    // Generates new pokemon when either all information is correctly guessed or a singular incorrect guess is made.
-    generateRandomPokemon();
   };
 
   // Adds and removes types from user answer on drag end
@@ -94,6 +68,31 @@ function PokeGuesser() {
     }
   };
 
+  const handleTypeButtonClick = (type) => {
+    if (userAnswer.includes(type)) {
+      console.log('Already includes');
+    } else {
+      setUserAnswer((userAnswer) => [...userAnswer, type]);
+    }
+  };
+
+  // Allows the user the convinience of emptying their answer zone easily
+  const handleReset = () => {
+    setUserAnswer([]);
+  };
+
+  // Compares user submission to answer
+  const handleSubmit = () => {
+    if (
+      (pokemonTypes[0] == userAnswer[0] || pokemonTypes[0] == userAnswer[1]) &&
+      (pokemonTypes[1] == userAnswer[0] || pokemonTypes[1] == userAnswer[1])
+    ) {
+      console.log('Correct');
+    } else console.log('Incorrect');
+    handleReset();
+    generateRandomPokemon();
+  };
+
   return (
     <>
       {/* Styling for pokedex design */}
@@ -106,13 +105,18 @@ function PokeGuesser() {
               <div className="flex h-full w-full flex-col rounded-[20px]">
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and user input areas*/}
-                <PokemonDisplay pokemonName={pokemonName} pokemonSprite={pokemonSprite} pokemonTypes={pokemonTypes} />
+                <PokemonDisplay
+                  pokemonName={pokemonName}
+                  pokemonSprite={pokemonSprite}
+                  handleReset={handleReset}
+                  handleSubmit={handleSubmit}
+                />
                 {/* Context for draf and dropping between answer zone and choice zone */}
                 <DndContext onDragEnd={handleDragEnd}>
                   {/* Droppable zone to submit your guess */}
-                  <UserSubmit userAnswer={userAnswer} setUserAnswer={setUserAnswer} />
+                  <UserSubmit userAnswer={userAnswer} />
                   {/* Displays all Pokemon types for user guesses */}
-                  <TypeButtons onClick={handleGuess} />
+                  <TypeButtons onClick={handleTypeButtonClick} />
                 </DndContext>
               </div>
             </div>

@@ -6,14 +6,16 @@ import UserSubmit from '../assets/components/UserSubmit';
 import { DndContext } from '@dnd-kit/core';
 
 function PokeGuesser() {
-  // Pokemon Info
-  const [pokemonId, setPokemonId] = useState(1);
-  const [pokemonName, setPokemonName] = useState(``);
-  const [pokemonSprite, setPokemonSprite] = useState('');
-  const [pokemonTypes, setPokemonTypes] = useState([]);
-
-  // User related variables
-  const [userAnswer, setUserAnswer] = useState([]);
+  // Object containing data of a pokemon as well as the user data relevant to it
+  const [pokemon, setPokemon] = useState({
+    id: 1,
+    name: '',
+    types: [],
+    hdSprite: '',
+    pixelSprite: '',
+    // Used for displaying previous answers
+    userTypeResponse: [],
+  });
 
   // Initializes a random pokemon ID when component mounts
   useEffect(() => {
@@ -22,18 +24,24 @@ function PokeGuesser() {
 
   // Generates a random Pokemon ID for a generation one pokemon
   const generateRandomPokemon = () => {
-    setPokemonId(Math.floor(Math.random() * 151 + 1));
+    setPokemon((currentPokemon) => ({
+      ...currentPokemon,
+      id: Math.floor(Math.random() * 151 + 1),
+    }));
   };
 
   // Fetches Pokemon data from PokeAPI whenever pokemonId changes
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}`);
 
         // Throws error if promise is rejected
         if (!response.ok) {
-          setPokemonId(1); // Temporary fix for rejected promises
+          setPokemon((currentPokemon) => ({
+            ...currentPokemon,
+            id: 1, // Temporary fix for rejected promises
+          }));
           throw new Error('Pokemon not found');
         }
 
@@ -46,13 +54,18 @@ function PokeGuesser() {
     };
 
     fetchPokemonData();
-  }, [pokemonId]);
+  }, [pokemon.id]);
 
   // Updates state variables with fetched Pokemon data
   const updatePokemonInfo = (data) => {
-    setPokemonName(data.name.charAt(0).toUpperCase() + data.name.slice(1));
-    setPokemonSprite(data.sprites.other['official-artwork'].front_default);
-    setPokemonTypes(data.types.map((typeIndex) => typeIndex.type.name));
+    setPokemon((currentPokemon) => ({
+      ...currentPokemon,
+      name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
+      types: data.types.map((typeIndex) => typeIndex.type.name),
+      hdSprite: data.sprites.other['official-artwork'].front_default,
+      pixelSprite: '',
+      userTypeResponse: [],
+    }));
   };
 
   // Adds and removes types from user answer on drag end
@@ -60,25 +73,34 @@ function PokeGuesser() {
     // If dropped in user-submit and from type-buttons add type to useranswer
     if (event.over.id === 'user-submit' && event.active.data.current === 'type-buttons') {
       // Checks if type is already in userAnswer
-      if (userAnswer.length < 2 && !userAnswer.includes(event.active.id))
-        setUserAnswer((userAnswer) => [...userAnswer, event.active.id]);
+      if (pokemon.userTypeResponse.length < 2 && !pokemon.userTypeResponse.includes(event.active.id))
+        setPokemon((currentPokemon) => ({
+          ...currentPokemon,
+          userTypeResponse: [...pokemon.userTypeResponse, event.active.id],
+        }));
     }
     // If dropped in type-buttons and from user-submit remove type from userAnswer
     if (event.over.id === 'type-buttons' && event.active.data.current === 'user-submit') {
-      setUserAnswer(userAnswer.filter((answerType) => answerType !== event.active.id.slice(4)));
+      setPokemon((currentPokemon) => ({
+        ...currentPokemon,
+        userTypeResponse: pokemon.userTypeResponse.filter((answerType) => answerType !== event.active.id.slice(4)),
+      }));
     }
   };
 
   // Allows the user the convinience of emptying their answer zone easily
   const handleReset = () => {
-    setUserAnswer([]);
+    setPokemon((currentPokemon) => ({
+      ...currentPokemon,
+      userTypeResponse: [],
+    }));
   };
 
   // Compares user submission to answer
   const handleSubmit = () => {
     if (
-      (pokemonTypes[0] == userAnswer[0] || pokemonTypes[0] == userAnswer[1]) &&
-      (pokemonTypes[1] == userAnswer[0] || pokemonTypes[1] == userAnswer[1])
+      (pokemon.types[0] == pokemon.userTypeResponse[0] || pokemon.types[0] == pokemon.userTypeResponse[1]) &&
+      (pokemon.types[1] == pokemon.userTypeResponse[0] || pokemon.types[1] == pokemon.userTypeResponse[1])
     ) {
       console.log('Correct');
     } else console.log('Incorrect');
@@ -99,15 +121,15 @@ function PokeGuesser() {
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay
-                  pokemonName={pokemonName}
-                  pokemonSprite={pokemonSprite}
+                  pokemonName={pokemon.name}
+                  pokemonSprite={pokemon.hdSprite}
                   handleReset={handleReset}
                   handleSubmit={handleSubmit}
                 />
                 {/* Context for draf and dropping between answer zone and choice zone */}
                 <DndContext onDragEnd={handleDragEnd}>
                   {/* Droppable zone to submit your guess */}
-                  <UserSubmit userAnswer={userAnswer} />
+                  <UserSubmit userAnswer={pokemon.userTypeResponse} />
                   {/* Displays all Pokemon types for user guesses */}
                   <TypeButtons />
                 </DndContext>
@@ -120,7 +142,7 @@ function PokeGuesser() {
               {/* Showcase answers for development only */}
               <h1 className="text-xl font-bold">CURRENT POKEMON TYPES</h1>
               <ul>
-                {pokemonTypes.map((type, index) => (
+                {pokemon.types.map((type, index) => (
                   <li className="text-xl" key={index}>
                     {type}
                   </li>
@@ -129,7 +151,7 @@ function PokeGuesser() {
 
               <h1 className="text-xl font-bold">CURRENT USER GUESSES</h1>
               <ul>
-                {userAnswer.map((type, index) => (
+                {pokemon.userTypeResponse.map((type, index) => (
                   <li className="text-xl" key={index}>
                     {type}
                   </li>

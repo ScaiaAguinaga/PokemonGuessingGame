@@ -15,7 +15,7 @@ function UserSubmit({ userAnswer }) {
       >
         {/* If no types are selected, directs user's to drag and drop */}
         {userAnswer.length === 0 ? (
-          <h1 className="px-2 text-center text-2xl font-bold text-[hsl(38,90%,44%)]">Drag Answers Here!</h1>
+          <h1 className="px-2 text-center text-2xl font-bold text-[hsl(38,90%,44%)]">Drag Types Here!</h1>
         ) : null}
 
         {userAnswer.map((type, index) => (

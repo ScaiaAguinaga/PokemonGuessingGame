@@ -5,7 +5,7 @@ import TypeButtons from '../components/TypeButtons';
 import { DndContext } from '@dnd-kit/core';
 
 import { fetchPokemonData } from '../utils/pokeApi';
-import { generateRandomPokemon, updateUserTypeResponse, formatPokemonName } from '../utils/pokemonUtils';
+import { generateRandomPokemon, updateUserTypeResponse } from '../utils/pokemonUtils';
 
 function PokeGuesser() {
   // Object containing data of a pokemon as well as the user data relevant to it
@@ -26,29 +26,8 @@ function PokeGuesser() {
 
   // Fetches Pokemon data from PokeAPI whenever pokemonId changes
   useEffect(() => {
-    const fetchPokemon = async () => {
-      try {
-        const data = await fetchPokemonData(pokemon.id);
-        updatePokemonInfo(data);
-      } catch (error) {
-        console.error('Error fetching Pokemon:', error);
-      }
-    };
-
-    fetchPokemon();
+    fetchPokemonData(pokemon.id, setPokemon);
   }, [pokemon.id]);
-
-  // Updates state variables with fetched Pokemon data
-  const updatePokemonInfo = (data) => {
-    setPokemon((currentPokemon) => ({
-      ...currentPokemon,
-      name: formatPokemonName(data.name),
-      types: data.types.map((typeIndex) => typeIndex.type.name),
-      hdSprite: data.sprites.other['official-artwork'].front_default,
-      pixelSprite: data.sprites.front_default,
-      userTypeResponse: [],
-    }));
-  };
 
   // Adds and removes types from user answer on drag end
   const handleDragEnd = (event) => {

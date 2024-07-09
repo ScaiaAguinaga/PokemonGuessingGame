@@ -18,8 +18,16 @@ export const updateUserTypeResponse = (pokemon, setPokemon, operation, type) => 
 export const generateRandomPokemon = (setPokemon) => {
   setPokemon((currentPokemon) => ({
     ...currentPokemon,
-    id: Math.floor(Math.random() * 151 + 1),
+    id: generateRandomPokemonId(currentPokemon.id),
   }));
+};
+
+const generateRandomPokemonId = (currentId) => {
+  let newId;
+  do {
+    newId = Math.floor(Math.random() * 1025 + 1);
+  } while (currentId == newId);
+  return newId;
 };
 
 // Capitalizes first letter of pokemon name for display

@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 
-function TypeCard({ type, source }) {
+function TypeCard({ type, source, cardStyle = 'full' }) {
   const allTypes = [
     { id: 1, name: `normal`, path: 'src/images/normal.svg' },
     { id: 2, name: `grass`, path: 'src/images/grass.svg' },
@@ -37,18 +37,28 @@ function TypeCard({ type, source }) {
   const formatTypeName = (type) => type.charAt(0).toUpperCase() + type.slice(1);
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className={`flex h-[56px] w-[165px] items-center rounded-[20px] px-3 py-2 bg-${selectedType.name}`}
-    >
-      <div className="flex w-full items-center">
-        <img src={selectedType.path} alt={selectedType.name} className="h-10 w-10" />
-        <h2 className="flex-grow text-center text-2xl font-bold text-white">{formatTypeName(selectedType.name)}</h2>
-      </div>
-    </div>
+    <>
+      {cardStyle == 'full' ? (
+        <div
+          ref={setNodeRef}
+          style={style}
+          {...listeners}
+          {...attributes}
+          className={`flex h-[56px] w-[165px] items-center rounded-[20px] px-3 py-2 bg-${selectedType.name}`}
+        >
+          <div className="flex w-full items-center">
+            <img src={selectedType.path} alt={selectedType.name} className="h-10 w-10" />
+            <h2 className="flex-grow text-center text-2xl font-bold text-white">{formatTypeName(selectedType.name)}</h2>
+          </div>
+        </div>
+      ) : ( 
+        <img
+          src={selectedType.path}
+          alt={selectedType.name}
+          className={`flex h-[60px] w-[60px] items-center rounded-[20px] p-2 bg-${selectedType.name}`}
+        />
+      )}
+    </>
   );
 }
 

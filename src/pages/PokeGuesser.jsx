@@ -2,22 +2,28 @@ import { useState, useEffect } from 'react';
 import PokemonDisplay from '../components/PokemonDisplay';
 import UserSubmit from '../components/UserSubmit';
 import TypeButtons from '../components/TypeButtons';
+import PokemonLog from '../components/PokemonLog.jsx';
 import { DndContext } from '@dnd-kit/core';
 
 import { fetchPokemonData } from '../utils/pokeApi';
-import { generateRandomPokemon, updateUserTypeResponse } from '../utils/pokemonUtils';
+import { generateRandomPokemon, updateUserTypeResponse } from '../utils/pokemonUtils.js';
 
 function PokeGuesser() {
   // Object containing data of a pokemon as well as the user data relevant to it
   const [pokemon, setPokemon] = useState({
     id: 1,
-    name: 'bulbasaur',
-    types: ['grass', 'poison'],
-    hdSprite: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-    pixelSprite: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+    name: '',
+    types: [],
+    hdSprite: '',
+    pixelSprite: '',
     // Used for displaying previous answers
     userTypeResponse: [],
   });
+
+  const [pokemonLog, setPokemonLog] = useState([]);
+
+  // Will be moved to userSubmit component with submit and reset buttons
+  const [clickedSubmit, setClickedSubmit] = useState(false);
 
   // Initializes a random pokemon ID when component mounts
   useEffect(() => {
@@ -53,14 +59,22 @@ function PokeGuesser() {
 
   // Compares user submission to answer
   const handleSubmit = () => {
-    if (
-      (pokemon.types[0] == pokemon.userTypeResponse[0] || pokemon.types[0] == pokemon.userTypeResponse[1]) &&
-      (pokemon.types[1] == pokemon.userTypeResponse[0] || pokemon.types[1] == pokemon.userTypeResponse[1])
-    ) {
-      console.log('Correct');
-    } else console.log('Incorrect');
-    handleReset();
-    generateRandomPokemon(setPokemon);
+    if (!clickedSubmit) {
+      setClickedSubmit(true);
+      setTimeout(() => {
+        setClickedSubmit(false);
+      }, 750);
+      if (
+        (pokemon.types[0] == pokemon.userTypeResponse[0] || pokemon.types[0] == pokemon.userTypeResponse[1]) &&
+        (pokemon.types[1] == pokemon.userTypeResponse[0] || pokemon.types[1] == pokemon.userTypeResponse[1])
+      ) {
+        console.log('Correct');
+      } else console.log('Incorrect');
+      setPokemonLog([...pokemonLog, pokemon]);
+      console.log(pokemonLog);
+      handleReset();
+      generateRandomPokemon(setPokemon);
+    }
   };
 
   return (
@@ -94,6 +108,8 @@ function PokeGuesser() {
           {/* Right panel */}
           <div className="rounded-[20px] bg-pokedex-red p-6">
             <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
+              <PokemonLog pokeLog={pokemonLog} />
+
               {/* Showcase answers for development only */}
               <h1 className="text-xl font-bold">CURRENT POKEMON TYPES</h1>
               <ul>

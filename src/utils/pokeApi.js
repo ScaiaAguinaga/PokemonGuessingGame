@@ -1,4 +1,4 @@
-import { formatPokemonName } from "./pokemonUtils";
+import { formatPokemonName } from './pokemonUtils.js';
 
 // Attempts to retrieve data of a given pokemon from PokeAPI
 // If successful, returns a JSON object containing pokemon data to be utilized
@@ -13,21 +13,21 @@ export const fetchPokemonData = async (pokemonId, setPokemon) => {
 
     // Parses fetched data into a json object and calls update function
     const data = await response.json();
-    updatePokemonInfo(data, setPokemon)
+    updatePokemonInfo(data, setPokemon);
   } catch (error) {
     console.error('Error fetching Pokemon:', error);
     throw error;
   }
 };
 
-  // Updates state variables with fetched Pokemon data
-  const updatePokemonInfo = (data, setPokemon) => {
-    setPokemon((currentPokemon) => ({
-      ...currentPokemon,
-      name: formatPokemonName(data.name),
-      types: data.types.map((typeIndex) => typeIndex.type.name),
-      hdSprite: data.sprites.other['official-artwork'].front_default,
-      pixelSprite: data.sprites.front_default,
-      userTypeResponse: [],
-    }));
-  };
+// Updates state variables with fetched Pokemon data
+const updatePokemonInfo = (data, setPokemon) => {
+  setPokemon((currentPokemon) => ({
+    ...currentPokemon,
+    name: formatPokemonName(data.name),
+    types: data.types.map((typeIndex) => typeIndex.type.name),
+    hdSprite: data.sprites.other['official-artwork'].front_default,
+    pixelSprite: data.sprites.front_default,
+    userTypeResponse: [],
+  }));
+};

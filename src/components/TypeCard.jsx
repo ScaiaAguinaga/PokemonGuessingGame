@@ -55,7 +55,7 @@ function TypeCard({ type, source, cardStyle = 'full' }) {
         <img
           src={selectedType.path}
           alt={selectedType.name}
-          className={`flex h-[60px] w-[60px] items-center rounded-[20px] p-2 bg-${selectedType.name}`}
+          className={`flex h-[40px] w-[40px] items-center rounded-[20px] p-2 bg-${selectedType.name}`}
         />
       )}
     </>

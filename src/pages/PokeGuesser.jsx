@@ -108,26 +108,12 @@ function PokeGuesser() {
           {/* Right panel */}
           <div className="rounded-[20px] bg-pokedex-red p-6">
             <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
-              <PokemonLog pokeLog={pokemonLog} />
-
-              {/* Showcase answers for development only */}
-              <h1 className="text-xl font-bold">CURRENT POKEMON TYPES</h1>
-              <ul>
-                {pokemon.types.map((type, index) => (
-                  <li className="text-xl" key={index}>
-                    {type}
-                  </li>
-                ))}
-              </ul>
-
-              <h1 className="text-xl font-bold">CURRENT USER GUESSES</h1>
-              <ul>
-                {pokemon.userTypeResponse.map((type, index) => (
-                  <li className="text-xl" key={index}>
-                    {type}
-                  </li>
-                ))}
-              </ul>
+              {/* Container for left panel content */}
+              <div className="flex h-full w-full flex-col rounded-[20px]">
+                <h1 className="mb-4 text-center text-5xl font-bold">POKÉLOG</h1>
+                {/* Displays log of past user answers */}
+                <PokemonLog pokeLog={pokemonLog} />
+              </div>
             </div>
           </div>
         </div>

@@ -22,16 +22,39 @@ export const generateRandomPokemon = (setPokemon) => {
   }));
 };
 
+// Generates a random pokemon ID in generation 1
 const generateRandomPokemonId = (currentId) => {
   let newId;
+
+  // Guarantees to not give the same pokemon twice in a row
   do {
-    newId = Math.floor(Math.random() * 1025 + 1);
+    newId = Math.floor(Math.random() * 151 + 1);
   } while (currentId == newId);
+
   return newId;
 };
 
 // Capitalizes first letter of pokemon name for display
 export const formatPokemonName = (name) => {
-  return name.charAt(0).toUpperCase() + name.slice(1);
-  // Future addition to format some of the more unusual names like nidoran-f
+  // If name contains hyphen or space use more complex formatting method
+  if (name.includes('-') || name.includes(' ')) {
+    // If name contains a hyphen, replace it with space
+    if (name.includes('-')) {
+      name = name.replace('-', ' ');
+    }
+
+    // Records the location of the space in the string
+    let spaceLocation = name.indexOf(' ');
+
+    // Formats name so the first letter and the letter after the space are upper case
+    name =
+      name.charAt(0).toUpperCase() +
+      name.slice(1, spaceLocation + 1) +
+      name.charAt(spaceLocation + 1).toUpperCase() +
+      name.slice(spaceLocation + 2);
+  } else {
+    // If name is one word just capitalize the first letter
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+  }
+  return name;
 };

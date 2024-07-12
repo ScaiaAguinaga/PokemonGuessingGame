@@ -1,7 +1,9 @@
+import { MdOutlineQuestionMark } from 'react-icons/md';
 import { useDraggable } from '@dnd-kit/core';
 
 function TypeCard({ type, source, extraClasses, cardStyle = 'full' }) {
   const allTypes = [
+    { id: 0, name: 'extra-guess' },
     { id: 1, name: `normal`, path: 'src/images/normal.svg' },
     { id: 2, name: `grass`, path: 'src/images/grass.svg' },
     { id: 3, name: `fire`, path: 'src/images/fire.svg' },
@@ -38,6 +40,7 @@ function TypeCard({ type, source, extraClasses, cardStyle = 'full' }) {
 
   return (
     <>
+      {/* Full cards are for drag and drop buttons for pokemon types */}
       {cardStyle == 'full' ? (
         <div
           ref={setNodeRef}
@@ -51,12 +54,19 @@ function TypeCard({ type, source, extraClasses, cardStyle = 'full' }) {
             <h2 className="flex-grow text-center text-2xl font-bold text-white">{formatTypeName(selectedType.name)}</h2>
           </div>
         </div>
-      ) : (
+      ) : // icon-only cards are for PokeLog display
+      // If not "extra-guess" then display just the icon of the type
+      // "extraClasses" is a set of styles for visually indicating an answer is incorrect
+      selectedType.name !== 'extra-guess' ? (
         <img
           src={selectedType.path}
           alt={selectedType.name}
           className={`flex h-[40px] w-[40px] items-center rounded-[20px] p-2 bg-${selectedType.name} ${extraClasses}`}
         />
+      ) : (
+        // If "extra-guess" display question mark icon with "incorrect" styling
+        // By default has styling to visually indicate incorrect guess
+        <MdOutlineQuestionMark className="flex h-[40px] w-[40px] items-center rounded-[20px] bg-red-300 p-[2px] text-white outline outline-4 outline-[#FF0000]" />
       )}
     </>
   );

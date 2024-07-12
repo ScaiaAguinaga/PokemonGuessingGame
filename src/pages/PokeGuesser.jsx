@@ -20,6 +20,10 @@ function PokeGuesser() {
     userTypeResponse: [],
   });
 
+  // Variables used for displaying user score
+  const [guessCount, setGuessCount] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
+
   const [pokemonLog, setPokemonLog] = useState([]);
 
   // Will be moved to userSubmit component with submit and reset buttons
@@ -59,19 +63,23 @@ function PokeGuesser() {
 
   // Compares user submission to answer
   const handleSubmit = () => {
+    // Sets a 0.75 second buffer between submission to avoid spam or misclicks
     if (!clickedSubmit) {
       setClickedSubmit(true);
       setTimeout(() => {
         setClickedSubmit(false);
       }, 750);
+
       if (
         (pokemon.types[0] == pokemon.userTypeResponse[0] || pokemon.types[0] == pokemon.userTypeResponse[1]) &&
         (pokemon.types[1] == pokemon.userTypeResponse[0] || pokemon.types[1] == pokemon.userTypeResponse[1])
       ) {
-        console.log('Correct');
-      } else console.log('Incorrect');
+        setGuessCount(guessCount + 1);
+        setCorrectCount(correctCount + 1);
+      } else setGuessCount(guessCount + 1);
+
+      // Logs pokemon and user answers then generates a new pokemon
       setPokemonLog([...pokemonLog, pokemon]);
-      console.log(pokemonLog);
       handleReset();
       generateRandomPokemon(setPokemon);
     }
@@ -114,6 +122,8 @@ function PokeGuesser() {
                 {/* Displays log of past user answers */}
                 <PokemonLog pokeLog={pokemonLog} />
               </div>
+              {'Guess Count: ' + guessCount}
+              {'     Correct Count: ' + correctCount}
             </div>
           </div>
         </div>

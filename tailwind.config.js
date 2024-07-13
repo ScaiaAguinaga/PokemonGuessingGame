@@ -45,6 +45,9 @@ export default {
         'pokedex-red': '#F62B1E',
         cream: '#FCE8C6',
       },
+      backgroundImage: {
+        pokeball: "url('src/images/pokeball-wallpaper.jpg')",
+      },
     },
   },
   plugins: [],

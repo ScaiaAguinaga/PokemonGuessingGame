@@ -124,7 +124,7 @@ function PokeGuesser() {
             <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
               {/* Container for left panel content */}
               <div className="flex h-full w-full flex-col rounded-[20px]">
-                <h1 className="mb-4 text-center text-5xl font-bold">POKÉLOG</h1>
+                <h1 className="mb-6 text-center text-5xl font-bold">POKÉLOG</h1>
                 {/* Displays log of past user answers */}
                 <PokemonLog pokeLog={pokemonLog} />
               </div>

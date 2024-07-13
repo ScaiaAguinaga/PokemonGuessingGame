@@ -21,13 +21,15 @@ function PokemonLog({ pokeLog }) {
   }, [pokeLog]);
 
   return (
-    <div
-      ref={scrollRef}
-      className={`flex h-[344px] w-full flex-col items-center gap-2 overflow-auto py-2 ${isScrollBarVisible ? `pl-15[px]` : ``}`}
-    >
-      {pokeLog.map((pokemon, index) => (
-        <PokemonLogCard key={index} pokemon={pokemon} />
-      ))}
+    <div className="bg-pokeball bg-center bg-cover mx-auto flex w-[500px] justify-center rounded-[20px] border-4 border-black py-[30px]">
+      <div
+        ref={scrollRef}
+        className={`flex h-[344px] w-[400px] flex-col items-center gap-2 overflow-auto py-2 ${isScrollBarVisible ? `pl-37[px]` : ``}`}
+      >
+        {pokeLog.map((pokemon, index) => (
+          <PokemonLogCard key={index} pokemon={pokemon} />
+        ))}
+      </div>
     </div>
   );
 }

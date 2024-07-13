@@ -30,9 +30,7 @@ function TypeButtons() {
   return (
     <div ref={setNodeRef} className="grid grid-cols-3 gap-4">
       {allPokemonTypes.map((type, index) => (
-        <button key={index}>
-          <TypeCard type={type} />
-        </button>
+        <TypeCard key={index} type={type} source="type-buttons" />
       ))}
     </div>
   );

@@ -1,7 +1,8 @@
-import { useDraggable } from '@dnd-kit/core';
+import { MdOutlineQuestionMark } from 'react-icons/md';
 
-function TypeCard({ type, source }) {
+function TypeIcon({ type, isCorrect }) {
   const allTypes = [
+    { id: 0, name: 'insufficient-types' },
     { id: 1, name: `normal`, path: 'src/images/normal.svg' },
     { id: 2, name: `grass`, path: 'src/images/grass.svg' },
     { id: 3, name: `fire`, path: 'src/images/fire.svg' },
@@ -25,38 +26,22 @@ function TypeCard({ type, source }) {
   // Sets selectedType to correspond with passed in type argument
   const selectedType = allTypes.find((t) => t.name === type);
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: source === 'user-submit' ? `ans-${type}` : `${type}`,
-    data: source === 'user-submit' ? 'user-submit' : 'type-buttons',
-  });
-
-  // Handles movement of type cards on drag
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
-
-  // Formats type name for display
-  const formatTypeName = (type) => type.charAt(0).toUpperCase() + type.slice(1);
+  // Modifies classes to display correct or incorrect responses
+  const displayValidation = isCorrect ? 'border-4 border-green-500' : 'border-4 border-[#FF0000]';
 
   return (
     <>
-      {/* Cards are for drag and drop buttons for pokemon types and are default card options */}
-      <div
-        ref={setNodeRef}
-        style={style}
-        {...listeners}
-        {...attributes}
-        className={`flex h-[56px] w-[165px] items-center rounded-[20px] px-3 py-2 bg-${selectedType.name}`}
-      >
-        <div className={'flex w-full items-center'}>
-          <img src={selectedType.path} alt={selectedType.name} className="h-10 w-10" />
-          <h2 className="flex-grow text-center text-2xl font-bold text-white">{formatTypeName(selectedType.name)}</h2>
-        </div>
-      </div>
+      {selectedType.name === 'insufficient-types' ? (
+        <MdOutlineQuestionMark className="flex h-[44px] w-[44px] rounded-full bg-[#FF0000] p-1 text-white" />
+      ) : (
+        <img
+          src={selectedType.path}
+          alt={selectedType.name}
+          className={`flex h-[44px] w-[44px] items-center rounded-full p-[6px] bg-${selectedType.name} ${displayValidation}`}
+        />
+      )}
     </>
   );
 }
 
-export default TypeCard;
+export default TypeIcon;

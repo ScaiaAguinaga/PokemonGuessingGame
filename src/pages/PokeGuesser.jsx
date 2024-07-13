@@ -70,6 +70,12 @@ function PokeGuesser() {
         setClickedSubmit(false);
       }, 750);
 
+      // Return and dont submit if user has not inputted a type
+      if (pokemon.userTypeResponse.length < 1) {
+        return;
+      }
+
+      // If 
       if (
         (pokemon.types[0] == pokemon.userTypeResponse[0] || pokemon.types[0] == pokemon.userTypeResponse[1]) &&
         (pokemon.types[1] == pokemon.userTypeResponse[0] || pokemon.types[1] == pokemon.userTypeResponse[1])

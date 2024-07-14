@@ -4,9 +4,11 @@ import UserSubmit from '../components/UserSubmit';
 import TypeButtons from '../components/TypeButtons';
 import PokemonLog from '../components/PokemonLog.jsx';
 import { DndContext } from '@dnd-kit/core';
+import { IoBulbOutline } from 'react-icons/io5';
 
 import { fetchPokemonData } from '../utils/pokeApi';
 import { generateRandomPokemon, updateUserTypeResponse } from '../utils/pokemonUtils.js';
+import ProgressStats from '../components/ProgressStats.jsx';
 
 function PokeGuesser() {
   // Object containing data of a pokemon as well as the user data relevant to it
@@ -20,10 +22,15 @@ function PokeGuesser() {
     userTypeResponse: [],
   });
 
-  // Variables used for displaying user score
-  const [guessCount, setGuessCount] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
+  const [game, setGame] = useState({
+    pokemonIds: [],
+    submitCount: 0,
+    correctCount: 0,
+    streak: 0,
+    time: '12:34:56',
+  });
 
+  // Log of all pokemon and user submissions
   const [pokemonLog, setPokemonLog] = useState([]);
 
   // Will be moved to userSubmit component with submit and reset buttons
@@ -75,16 +82,31 @@ function PokeGuesser() {
         return;
       }
 
-      // If 
+      // Add pokemon id to game id list and increment guess count
+      setGame((currentGame) => ({
+        ...currentGame,
+        pokemonIds: [...currentGame.pokemonIds, pokemon.id],
+        submitCount: currentGame.submitCount + 1,
+      }));
+
+      // If user correctly guesses all types increment score and streak
       if (
         (pokemon.types[0] == pokemon.userTypeResponse[0] || pokemon.types[0] == pokemon.userTypeResponse[1]) &&
         (pokemon.types[1] == pokemon.userTypeResponse[0] || pokemon.types[1] == pokemon.userTypeResponse[1])
       ) {
-        setGuessCount(guessCount + 1);
-        setCorrectCount(correctCount + 1);
-      } else setGuessCount(guessCount + 1);
+        setGame((currentGame) => ({
+          ...currentGame,
+          correctCount: currentGame.correctCount + 1,
+          streak: currentGame.streak + 1,
+        }));
+      } else {
+        setGame((currentGame) => ({
+          ...currentGame,
+          streak: 0,
+        }));
+      }
 
-      // Logs pokemon and user answers then generates a new pokemon
+      // Adds user submission to pokemon log and generates a new pokemon
       setPokemonLog([...pokemonLog, pokemon]);
       handleReset();
       generateRandomPokemon(setPokemon);
@@ -102,6 +124,7 @@ function PokeGuesser() {
               {/* Container for left panel content */}
               <div className="flex h-full w-full flex-col rounded-[20px]">
                 <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
+
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay
                   pokemonName={pokemon.name}
@@ -122,14 +145,22 @@ function PokeGuesser() {
           {/* Right panel */}
           <div className="rounded-[20px] bg-pokedex-red p-6">
             <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
-              {/* Container for left panel content */}
-              <div className="flex h-full w-full flex-col rounded-[20px]">
-                <h1 className="mb-6 text-center text-5xl font-bold">POKÉLOG</h1>
+              {/* Container for right panel content */}
+              <div className="mb-4 flex w-full flex-col">
+                <div className="mb-6 flex items-center justify-between">
+                  <h1 className="ml-[68px] flex-grow text-center text-5xl font-bold">POKÉLOG</h1>
+                  <IoBulbOutline
+                    className="ml-4 mr-5 h-12 w-12 cursor-pointer rounded-full bg-pokedex-red p-2 text-white"
+                    onClick={() => console.log('Hint pressed')}
+                  />
+                </div>
+
                 {/* Displays log of past user answers */}
                 <PokemonLog pokeLog={pokemonLog} />
+
+                {/* Displays game and user stats */}
+                <ProgressStats game={game} />
               </div>
-              {'Guess Count: ' + guessCount}
-              {'     Correct Count: ' + correctCount}
             </div>
           </div>
         </div>

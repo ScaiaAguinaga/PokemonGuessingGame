@@ -46,7 +46,7 @@ export default {
         cream: '#FCE8C6',
       },
       backgroundImage: {
-        pokeball: "url('src/images/pokeball-wallpaper.jpg')",
+        pokeball: "url('src/images/pokeball-wallpaper.jpg')", // Ensure the correct path to your image
       },
     },
   },

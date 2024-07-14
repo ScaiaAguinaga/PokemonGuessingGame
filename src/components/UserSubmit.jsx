@@ -8,7 +8,7 @@ function UserSubmit({ userAnswer }) {
   });
 
   return (
-    <div className="">
+    <div>
       <div
         ref={setNodeRef}
         className="m-auto my-4 flex h-[76px] w-[366px] items-center justify-center gap-4 rounded-[20px] border-4 border-black"

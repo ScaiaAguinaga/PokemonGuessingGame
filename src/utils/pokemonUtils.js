@@ -1,19 +1,3 @@
-// Updates userTypeRespons
-export const updateUserTypeResponse = (pokemon, setPokemon, operation, type) => {
-  if (operation === 'add') {
-    setPokemon((currentPokemon) => ({
-      ...currentPokemon,
-      userTypeResponse: [...pokemon.userTypeResponse, type],
-    }));
-  }
-  if (operation == 'remove') {
-    setPokemon((currentPokemon) => ({
-      ...currentPokemon,
-      userTypeResponse: pokemon.userTypeResponse.filter((answerType) => answerType !== type.slice(4)),
-    }));
-  }
-};
-
 // Generates a random Pokemon ID (currently only gen 1)
 export const generateRandomPokemon = (setPokemon) => {
   setPokemon((currentPokemon) => ({
@@ -34,7 +18,7 @@ const generateRandomPokemonId = (currentId) => {
   return newId;
 };
 
-// Capitalizes first letter of pokemon name for display
+// Formats name with proper capitalization and spacing for display purposes
 export const formatPokemonName = (name) => {
   // If name contains hyphen or space use more complex formatting method
   if (name.includes('-') || name.includes(' ')) {

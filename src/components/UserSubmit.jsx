@@ -1,14 +1,30 @@
-import TypeCard from './TypeCard';
-
+// React hooks
+import { useState } from 'react';
+// dnd-kit
 import { useDroppable } from '@dnd-kit/core';
+// Components
+import TypeCard from './TypeCard';
+// Utilities
+import { handleReset, handleSubmit } from '../utils/gameUtils';
+// Icons
+import { MdCancel, MdCheckCircle } from 'react-icons/md';
 
-function UserSubmit({ userAnswer }) {
+
+function UserSubmit({ userAnswer, pokemon, setPokemon, pokemonLog, setPokemonLog, setGame }) {
+  // Will be moved to userSubmit component with submit and reset buttons
+  const [clickedSubmit, setClickedSubmit] = useState(false);
+
   const { setNodeRef } = useDroppable({
     id: 'user-submit',
   });
 
   return (
-    <div>
+    <div className="flex items-center">
+      {/* Button for emptying current user answer */}
+      <div className="ml-6 flex flex-grow items-end justify-start">
+        <MdCancel onClick={() => handleReset(setPokemon)} cursor="pointer" className="h-10 w-10" />
+      </div>
+      {/* User submission zone for drag and drop */}
       <div
         ref={setNodeRef}
         className="m-auto my-4 flex h-[76px] w-[366px] items-center justify-center gap-4 rounded-[20px] border-4 border-black"
@@ -21,6 +37,16 @@ function UserSubmit({ userAnswer }) {
         {userAnswer.map((type, index) => (
           <TypeCard key={index} type={type} source="user-submit" />
         ))}
+      </div>
+      {/* Button for user submit */}
+      <div className="mr-6 flex flex-grow items-end justify-end">
+        <MdCheckCircle
+          onClick={() =>
+            handleSubmit(clickedSubmit, setClickedSubmit, pokemon, setPokemon, pokemonLog, setPokemonLog, setGame)
+          }
+          cursor="pointer"
+          className="h-10 w-10"
+        />
       </div>
     </div>
   );

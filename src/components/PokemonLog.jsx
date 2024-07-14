@@ -1,4 +1,6 @@
+// React hooks
 import { useEffect, useRef, useState } from 'react';
+// Components
 import PokemonLogCard from './PokemonLogCard.jsx';
 
 function PokemonLog({ pokeLog }) {

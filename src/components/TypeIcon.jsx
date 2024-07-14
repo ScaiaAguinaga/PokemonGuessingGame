@@ -1,3 +1,4 @@
+// Icons
 import { MdOutlineQuestionMark } from 'react-icons/md';
 
 function TypeIcon({ type, isCorrect }) {

@@ -1,7 +1,4 @@
-import { MdCancel } from 'react-icons/md';
-import { MdCheckCircle } from "react-icons/md";
-
-const PokemonDisplay = ({ pokemonName, pokemonSprite, handleReset, handleSubmit }) => {
+const PokemonDisplay = ({ pokemonName, pokemonSprite }) => {
   return (
     <>
       <div className="flex flex-col items-center">
@@ -11,13 +8,7 @@ const PokemonDisplay = ({ pokemonName, pokemonSprite, handleReset, handleSubmit 
         </div>
         {/* Displays pokemon name */}
         <div className="mt-4 flex w-full justify-center">
-          <div className="ml-6 flex flex-grow items-end justify-start">
-            <MdCancel onClick={() => handleReset()} cursor="pointer" className="h-10 w-10" />
-          </div>
           <h2 className="text-center text-4xl">{pokemonName}</h2>
-          <div className="mr-6 flex flex-grow items-end justify-end">
-            <MdCheckCircle onClick={() => handleSubmit()} cursor="pointer" className="h-10 w-10" />
-          </div>
         </div>
       </div>
     </>

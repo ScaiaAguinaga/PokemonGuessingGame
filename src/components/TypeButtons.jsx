@@ -1,4 +1,6 @@
+// dnd-kit
 import { useDroppable } from '@dnd-kit/core';
+// Components
 import TypeCard from './TypeCard';
 
 const allPokemonTypes = [

@@ -1,4 +1,6 @@
+// React hooks
 import { useEffect, useState } from 'react';
+// Components
 import TypeIcon from './TypeIcon';
 
 function PokemonLogCard({ pokemon }) {
@@ -33,7 +35,7 @@ function PokemonLogCard({ pokemon }) {
 
   return (
     <div
-      className="flex w-[366px] rounded-[20px] bg-cream border-4 border-black px-4"
+      className="flex w-[366px] rounded-[20px] border-4 border-black bg-cream px-4"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

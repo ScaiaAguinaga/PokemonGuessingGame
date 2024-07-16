@@ -1,21 +1,22 @@
-// Generates a random Pokemon ID (currently only gen 1)
-export const generateRandomPokemon = (setPokemon) => {
-  setPokemon((currentPokemon) => ({
-    ...currentPokemon,
-    id: generateRandomPokemonId(currentPokemon.id),
-  }));
-};
+// Generates a random Pokemon ID that has not been used (currently only gen 1)
+export const generateRandomPokemon = (setPokemon, game) => {
+  // Ends game if submission is 4 or higher
+  // Set length to the amount of pokemon to be guessed
+  // Other game completion check is in gameUtils {handleSubmit}
+  if (game.pokemonIds.length == 151) {
+    console.log('Game Over');
+    return;
+  }
 
-// Generates a random pokemon ID in generation 1
-const generateRandomPokemonId = (currentId) => {
   let newId;
-
-  // Guarantees to not give the same pokemon twice in a row
   do {
     newId = Math.floor(Math.random() * 151 + 1);
-  } while (currentId == newId);
+  } while (game.pokemonIds.includes(newId));
 
-  return newId;
+  setPokemon((currentPokemon) => ({
+    ...currentPokemon,
+    id: newId,
+  }));
 };
 
 // Formats name with proper capitalization and spacing for display purposes

@@ -16,7 +16,7 @@ export const updateUserTypeResponse = (pokemon, setPokemon, operation, type) => 
   }
 };
 
-// Empties user submission zone
+// Resets the types selected in the user submission zone
 export const handleReset = (setPokemon) => {
   setPokemon((currentPokemon) => ({
     ...currentPokemon,
@@ -25,7 +25,16 @@ export const handleReset = (setPokemon) => {
 };
 
 // Compares user submission to answer
-export const handleSubmit = (clickedSubmit, setClickedSubmit, pokemon, setPokemon, pokemonLog, setPokemonLog, setGame) => {
+export const handleSubmit = (
+  clickedSubmit,
+  setClickedSubmit,
+  pokemon,
+  setPokemon,
+  pokemonLog,
+  setPokemonLog,
+  game,
+  setGame,
+) => {
   // Sets a 0.75 second buffer between submission to avoid spam or misclicks
   if (!clickedSubmit) {
     setClickedSubmit(true);
@@ -35,6 +44,14 @@ export const handleSubmit = (clickedSubmit, setClickedSubmit, pokemon, setPokemo
 
     // Return and dont submit if user has not inputted a type
     if (pokemon.userTypeResponse.length < 1) {
+      return;
+    }
+
+    // Does nothing if game completion has been met
+    // Set length to the amount of pokemon to be guessed
+    // Other game completion check is in pokemonUtils {generateRandomPokemon}
+    if (game.pokemonIds.length == 151) {
+      console.log('Game has been completed');
       return;
     }
 
@@ -65,7 +82,7 @@ export const handleSubmit = (clickedSubmit, setClickedSubmit, pokemon, setPokemo
     // Adds user submission to pokemon log and generates a new pokemon
     setPokemonLog([...pokemonLog, pokemon]);
     handleReset(setPokemon);
-    generateRandomPokemon(setPokemon);
+    generateRandomPokemon(setPokemon, game);
   }
 };
 

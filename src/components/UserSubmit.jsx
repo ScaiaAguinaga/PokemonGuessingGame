@@ -9,8 +9,7 @@ import { handleReset, handleSubmit } from '../utils/gameUtils';
 // Icons
 import { MdCancel, MdCheckCircle } from 'react-icons/md';
 
-
-function UserSubmit({ userAnswer, pokemon, setPokemon, pokemonLog, setPokemonLog, setGame }) {
+function UserSubmit({ userAnswer, pokemon, setPokemon, pokemonLog, setPokemonLog, game, setGame }) {
   // Will be moved to userSubmit component with submit and reset buttons
   const [clickedSubmit, setClickedSubmit] = useState(false);
 
@@ -42,7 +41,7 @@ function UserSubmit({ userAnswer, pokemon, setPokemon, pokemonLog, setPokemonLog
       <div className="mr-6 flex flex-grow items-end justify-end">
         <MdCheckCircle
           onClick={() =>
-            handleSubmit(clickedSubmit, setClickedSubmit, pokemon, setPokemon, pokemonLog, setPokemonLog, setGame)
+            handleSubmit(clickedSubmit, setClickedSubmit, pokemon, setPokemon, pokemonLog, setPokemonLog, game, setGame)
           }
           cursor="pointer"
           className="h-10 w-10"

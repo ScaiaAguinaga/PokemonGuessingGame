@@ -26,7 +26,7 @@ function PokemonLog({ pokeLog }) {
     <div className="bg-pokeball mx-auto flex w-[500px] justify-center rounded-[20px] border-4 border-black bg-cover bg-center py-[30px]">
       <div
         ref={scrollRef}
-        className={`flex h-[344px] w-[400px] flex-col items-center gap-2 overflow-auto py-2 ${isScrollBarVisible ? `pl-37[px]` : ``}`}
+        className={`flex h-[344px] w-[420px] flex-col items-center gap-2 overflow-auto py-2 ${isScrollBarVisible ? `pl-37[px]` : ``}`}
       >
         {pokeLog.map((pokemon, index) => (
           <PokemonLogCard key={index} pokemon={pokemon} />

@@ -40,8 +40,8 @@ function PokeGuesser() {
 
   // Initializes a random pokemon ID when component mounts
   useEffect(() => {
-    generateRandomPokemon(setPokemon);
-  }, []);
+    generateRandomPokemon(setPokemon, game);
+  }, [game]);
 
   // Fetches Pokemon data from PokeAPI whenever pokemonId changes
   useEffect(() => {
@@ -52,13 +52,13 @@ function PokeGuesser() {
     <>
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">
-        <div className="grid h-[1000px] w-[1280px] grid-cols-2 gap-[30px]">
+        <div className="grid grid-cols-2 gap-[30px]">
           {/* Left panel */}
-          <div className="rounded-[20px] bg-pokedex-red p-6">
+          <div className="h-[1000px] w-[625px] rounded-[20px] bg-pokedex-red p-6">
             <div className="h-full w-full rounded-[20px] bg-cream px-4 py-6">
               {/* Container for left panel content */}
               <div className="flex h-full w-full flex-col">
-                <h1 className="mb-6 text-center text-5xl font-bold">POKÉDEX</h1>
+                <h1 className="mb-6 text-center text-5xl font-bold">POKÉGUESSER</h1>
 
                 {/* Displays Pokemon image and user input areas*/}
                 <PokemonDisplay pokemonName={pokemon.name} pokemonSprite={pokemon.hdSprite} />
@@ -71,6 +71,7 @@ function PokeGuesser() {
                     setPokemon={setPokemon}
                     pokemonLog={pokemonLog}
                     setPokemonLog={setPokemonLog}
+                    game={game}
                     setGame={setGame}
                   />
                   {/* Displays all Pokemon types for user guesses */}
@@ -80,7 +81,7 @@ function PokeGuesser() {
             </div>
           </div>
           {/* Right panel */}
-          <div className="rounded-[20px] bg-pokedex-red p-6">
+          <div className="h-[1000px] w-[625px] rounded-[20px] bg-pokedex-red p-6">
             <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
               {/* Container for right panel content */}
               <div className="flex h-full w-full flex-col">

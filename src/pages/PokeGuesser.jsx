@@ -1,5 +1,5 @@
 // React hooks
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // dnd-kit
 import { DndContext } from '@dnd-kit/core';
 // Components
@@ -9,9 +9,7 @@ import TypeButtons from '../components/TypeButtons';
 import PokemonLog from '../components/PokemonLog';
 import GameStats from '../components/GameStats';
 // Utilities
-import { fetchPokemonData } from '../utils/pokeApi';
-import { generateRandomPokemon } from '../utils/pokemonUtils';
-import { handleDragEnd } from '../utils/gameUtils';
+import { handleDragEnd } from '../utils/userSubmit';
 // Icons
 import { IoBulbOutline } from 'react-icons/io5';
 
@@ -38,16 +36,6 @@ function PokeGuesser() {
   // Log of all pokemon and user submissions
   const [pokemonLog, setPokemonLog] = useState([]);
 
-  // Initializes a random pokemon ID when component mounts
-  useEffect(() => {
-    generateRandomPokemon(setPokemon, game);
-  }, [game]);
-
-  // Fetches Pokemon data from PokeAPI whenever pokemonId changes
-  useEffect(() => {
-    fetchPokemonData(pokemon.id, setPokemon);
-  }, [pokemon.id]);
-
   return (
     <>
       {/* Styling for pokedex design */}
@@ -66,7 +54,6 @@ function PokeGuesser() {
                 <DndContext onDragEnd={(event) => handleDragEnd(event, pokemon, setPokemon)}>
                   {/* Droppable zone to clear or submit your guess */}
                   <UserSubmit
-                    userAnswer={pokemon.userTypeResponse}
                     pokemon={pokemon}
                     setPokemon={setPokemon}
                     pokemonLog={pokemonLog}
@@ -95,7 +82,7 @@ function PokeGuesser() {
                 {/* Displays log of past user answers */}
                 <PokemonLog pokeLog={pokemonLog} />
                 {/* Displays game and user stats */}
-                <GameStats game={game} />
+                <GameStats game={game} setGame={setGame} />
               </div>
             </div>
           </div>

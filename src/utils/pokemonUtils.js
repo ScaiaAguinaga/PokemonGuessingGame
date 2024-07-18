@@ -1,22 +1,33 @@
-// Generates a random Pokemon ID that has not been used (currently only gen 1)
-export const generateRandomPokemon = (setPokemon, game) => {
-  // Ends game if submission is 4 or higher
-  // Set length to the amount of pokemon to be guessed
-  // Other game completion check is in gameUtils {handleSubmit}
-  if (game.pokemonIds.length == 151) {
-    console.log('Game Over');
-    return;
-  }
-
-  let newId;
-  do {
-    newId = Math.floor(Math.random() * 151 + 1);
-  } while (game.pokemonIds.includes(newId));
-
+// Sets the pokemon ID
+export const setPokemonId = (newId, setPokemon) => {
   setPokemon((currentPokemon) => ({
     ...currentPokemon,
     id: newId,
   }));
+};
+
+// Updates Pokemon object with newly fetched Pokemon data from PokeAPI
+export const updatePokemonInfo = (data, setPokemon) => {
+  setPokemon((currentPokemon) => ({
+    ...currentPokemon,
+    name: formatPokemonName(data.name),
+    types: data.types.map((typeIndex) => typeIndex.type.name),
+    hdSprite: data.sprites.other['official-artwork'].front_default,
+    pixelSprite: data.sprites.front_default,
+    userTypeResponse: [],
+  }));
+};
+
+// Generates a random Pokemon ID that has not been used
+export const generatePokemonId = (setPokemon, game) => {
+  const pokemonIds = game.pokemonIds;
+
+  let newId;
+  do {
+    newId = Math.floor(Math.random() * 151 + 1);
+  } while (pokemonIds.includes(newId));
+
+  setPokemonId(newId, setPokemon);
 };
 
 // Formats name with proper capitalization and spacing for display purposes
@@ -42,4 +53,28 @@ export const formatPokemonName = (name) => {
     name = name.charAt(0).toUpperCase() + name.slice(1);
   }
   return name;
+};
+
+// Updates userTypeRespons
+export const updateUserTypeResponse = (pokemon, setPokemon, operation, type) => {
+  if (operation === 'add') {
+    setPokemon((currentPokemon) => ({
+      ...currentPokemon,
+      userTypeResponse: [...pokemon.userTypeResponse, type],
+    }));
+  }
+  if (operation == 'remove') {
+    setPokemon((currentPokemon) => ({
+      ...currentPokemon,
+      userTypeResponse: pokemon.userTypeResponse.filter((answerType) => answerType !== type.slice(4)),
+    }));
+  }
+};
+
+// Resets the types selected in the user submission zone
+export const handleReset = (setPokemon) => {
+  setPokemon((currentPokemon) => ({
+    ...currentPokemon,
+    userTypeResponse: [],
+  }));
 };

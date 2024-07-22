@@ -28,6 +28,11 @@ function UserSubmit({ pokemon, setPokemon, pokemonLog, setPokemonLog, game, setG
     }
   };
 
+  // Handles the reset button click
+  const handleResetClick = () => {
+    handleReset(setPokemon);
+  };
+
   const { setNodeRef } = useDroppable({
     id: 'user-submit',
   });
@@ -36,7 +41,7 @@ function UserSubmit({ pokemon, setPokemon, pokemonLog, setPokemonLog, game, setG
     <div className="flex items-center">
       {/* Button for emptying current user answer */}
       <div className="ml-6 flex flex-grow items-end justify-start">
-        <MdCancel onClick={() => handleReset(setPokemon)} cursor="pointer" className="h-10 w-10" />
+        <MdCancel onClick={handleResetClick} cursor="pointer" className="h-10 w-10" />
       </div>
       {/* User submission zone for drag and drop */}
       <div

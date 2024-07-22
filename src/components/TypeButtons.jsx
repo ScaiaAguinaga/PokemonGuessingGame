@@ -3,6 +3,7 @@ import { useDroppable } from '@dnd-kit/core';
 // Components
 import TypeCard from './TypeCard';
 
+// All pokemon types needed for button generation\
 const allPokemonTypes = [
   'normal',
   'grass',

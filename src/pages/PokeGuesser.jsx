@@ -16,7 +16,7 @@ import { IoBulbOutline } from 'react-icons/io5';
 function PokeGuesser() {
   // Object containing data of a pokemon as well as the user data relevant to it
   const [pokemon, setPokemon] = useState({
-    id: 1,
+    id: 0,
     name: '',
     types: [],
     hdSprite: '',
@@ -35,9 +35,24 @@ function PokeGuesser() {
 
   // Log of all pokemon and user submissions
   const [pokemonLog, setPokemonLog] = useState([]);
+  // State variable for start screen
+  const [isStartVisible, setIsStartVisible] = useState(true);
+
+  // Handles game start button click
+  const handleStartClick = () => {
+    setIsStartVisible(false);
+  };
 
   return (
     <>
+      {isStartVisible && (
+        <div className="absolute flex h-screen w-screen items-center justify-center bg-[rgb(255,255,255)]/[.75] font-bold">
+          <button onClick={handleStartClick} className="flex rounded-[20px] bg-[rgb(0,0,0)]/[1] p-10">
+            <h1 className='text-5xl text-white'> START POPUP</h1>
+          </button>
+        </div>
+      )}
+
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="grid grid-cols-2 gap-[30px]">

@@ -20,13 +20,14 @@ export const updatePokemonInfo = (data, setPokemon) => {
 };
 
 // Generates a random Pokemon ID that has not been used
-export const generatePokemonId = (game) => {
-  const pokemonIds = game.pokemonIds;
+export const generatePokemonId = (game, preloadedIds = [0]) => {
+  const { pokemonIds } = game;
+  const excludedIds = [...pokemonIds, ...preloadedIds];
 
   let newId;
   do {
     newId = Math.floor(Math.random() * 151 + 1);
-  } while (pokemonIds.includes(newId));
+  } while (excludedIds.includes(newId));
 
   return newId;
 };

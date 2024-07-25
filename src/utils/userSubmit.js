@@ -35,7 +35,9 @@ export const handleSubmit = (pokemon, setPokemon, nextPokemon, setNextPokemon, p
   setPokemon(nextPokemon);
 
   // Preload the next Pokémon's data
-  fetchPokemonData(generatePokemonId(game)).then((data) => {
+  const preloadedIds = [pokemon.id, nextPokemon.id];
+
+  fetchPokemonData(generatePokemonId(game, preloadedIds)).then((data) => {
     updatePokemonInfo(data, setNextPokemon);
   });
 };

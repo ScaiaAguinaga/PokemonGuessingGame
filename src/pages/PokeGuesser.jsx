@@ -15,7 +15,16 @@ import { initializeSession } from '../utils/sessionUtils';
 import { IoBulbOutline } from 'react-icons/io5';
 
 function PokeGuesser() {
-  // Object containing data of a pokemon as well as the user data relevant to it
+  // State for managing game-related data
+  const [game, setGame] = useState({
+    pokemonIds: [],
+    submitCount: 0,
+    correctCount: 0,
+    streak: 0,
+    time: '00:00:00',
+  });
+
+  // State for managing current Pokémon data
   const [pokemon, setPokemon] = useState({
     id: 0,
     name: '',
@@ -26,7 +35,7 @@ function PokeGuesser() {
     userTypeResponse: [],
   });
 
-  // Object that contains the data for the next pokemon to display
+  // State for managing next Pokémon data
   const [nextPokemon, setNextPokemon] = useState({
     id: 0,
     name: '',
@@ -35,14 +44,6 @@ function PokeGuesser() {
     pixelSprite: '',
     // Used for displaying previous answers
     userTypeResponse: [],
-  });
-
-  const [game, setGame] = useState({
-    pokemonIds: [],
-    submitCount: 0,
-    correctCount: 0,
-    streak: 0,
-    time: '12:34:56',
   });
 
   // Log of all pokemon and user submissions
@@ -54,8 +55,10 @@ function PokeGuesser() {
   const handleStartClick = () => {
     // Removes popup window
     setIsStartVisible(false);
-    // Generates first pokemon
+
+    // Preload the first two pokemon of the session
     initializeSession(setPokemon, setNextPokemon, game);
+
     // Starts timer
   };
 

@@ -10,12 +10,24 @@ import PokemonLog from '../components/PokemonLog';
 import GameStats from '../components/GameStats';
 // Utilities
 import { handleDragEnd } from '../utils/userSubmit';
+import { initializeSession } from '../utils/sessionUtils';
 // Icons
 import { IoBulbOutline } from 'react-icons/io5';
 
 function PokeGuesser() {
   // Object containing data of a pokemon as well as the user data relevant to it
   const [pokemon, setPokemon] = useState({
+    id: 0,
+    name: '',
+    types: [],
+    hdSprite: '',
+    pixelSprite: '',
+    // Used for displaying previous answers
+    userTypeResponse: [],
+  });
+
+  // Object that contains the data for the next pokemon to display
+  const [nextPokemon, setNextPokemon] = useState({
     id: 0,
     name: '',
     types: [],
@@ -40,16 +52,29 @@ function PokeGuesser() {
 
   // Handles game start button click
   const handleStartClick = () => {
+    // Removes popup window
     setIsStartVisible(false);
+    // Generates first pokemon
+    initializeSession(setPokemon, setNextPokemon, game);
+    // Starts timer
   };
 
   return (
     <>
+      {/* Start popup window */}
       {isStartVisible && (
-        <div className="absolute flex h-screen w-screen items-center justify-center bg-[rgb(255,255,255)]/[.75] font-bold">
-          <button onClick={handleStartClick} className="flex rounded-[20px] bg-[rgb(0,0,0)]/[1] p-10">
-            <h1 className='text-5xl text-white'> START POPUP</h1>
-          </button>
+        <div className="absolute flex h-screen w-screen items-center justify-center bg-[rgb(255,255,255)]/[.75]">
+          <div className="flex flex-col items-center justify-center gap-y-10 rounded-[20px] border-4 border-black bg-[rgb(252,232,198)]/[1] p-10 shadow-2xl">
+            <h1 className="text-5xl">
+              Welcome to <span className="font-bold text-pokedex-red">POKÉGUESSER</span>
+            </h1>
+            <button
+              onClick={handleStartClick}
+              className="flex h-[100px] w-[225px] items-center justify-center rounded-[20px] border-4 border-black bg-pokedex-red drop-shadow-xl"
+            >
+              <h1 className="text-3xl font-bold text-white">Start</h1>
+            </button>
+          </div>
         </div>
       )}
 
@@ -71,6 +96,8 @@ function PokeGuesser() {
                   <UserSubmit
                     pokemon={pokemon}
                     setPokemon={setPokemon}
+                    nextPokemon={nextPokemon}
+                    setNextPokemon={setNextPokemon}
                     pokemonLog={pokemonLog}
                     setPokemonLog={setPokemonLog}
                     game={game}

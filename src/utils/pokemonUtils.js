@@ -10,6 +10,7 @@ export const setPokemonId = (newId, setPokemon) => {
 export const updatePokemonInfo = (data, setPokemon) => {
   setPokemon((currentPokemon) => ({
     ...currentPokemon,
+    id: data.id,
     name: formatPokemonName(data.name),
     types: data.types.map((typeIndex) => typeIndex.type.name),
     hdSprite: data.sprites.other['official-artwork'].front_default,
@@ -19,7 +20,7 @@ export const updatePokemonInfo = (data, setPokemon) => {
 };
 
 // Generates a random Pokemon ID that has not been used
-export const generatePokemonId = (setPokemon, game) => {
+export const generatePokemonId = (game) => {
   const pokemonIds = game.pokemonIds;
 
   let newId;
@@ -27,7 +28,7 @@ export const generatePokemonId = (setPokemon, game) => {
     newId = Math.floor(Math.random() * 151 + 1);
   } while (pokemonIds.includes(newId));
 
-  setPokemonId(newId, setPokemon);
+  return newId;
 };
 
 // Formats name with proper capitalization and spacing for display purposes

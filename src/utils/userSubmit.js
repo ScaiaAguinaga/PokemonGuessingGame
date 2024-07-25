@@ -4,7 +4,7 @@ import * as gameUtils from './gameUtils';
 import { fetchPokemonData } from './pokeApi';
 
 // Compares user submission to answer
-export const handleSubmit = (pokemon, setPokemon, pokemonLog, setPokemonLog, game, setGame) => {
+export const handleSubmit = (pokemon, setPokemon, nextPokemon, setNextPokemon, pokemonLog, setPokemonLog, game, setGame) => {
   // Return and dont submit if user has not inputted a type
   if (pokemon.userTypeResponse.length < 1) {
     return;
@@ -25,15 +25,18 @@ export const handleSubmit = (pokemon, setPokemon, pokemonLog, setPokemonLog, gam
     gameUtils.resetStreak(setGame);
   }
 
-  // Adds user submission to pokemon log
+  // Log the current Pokémon and user's submission
   setPokemonLog([...pokemonLog, pokemon]);
-  // Resets submission zone for next response
+
+  // Reset the user's submission input
   handleReset(setPokemon);
-  // Generates the next Pokemon ID
-  generatePokemonId(setPokemon, game);
-  // fetches and updates the next Pokemon's data
-  fetchPokemonData(pokemon.id).then((data) => {
-    updatePokemonInfo(data, setPokemon);
+
+  // Update the current Pokémon with the preloaded one to reduce downtime
+  setPokemon(nextPokemon);
+
+  // Preload the next Pokémon's data
+  fetchPokemonData(generatePokemonId(game)).then((data) => {
+    updatePokemonInfo(data, setNextPokemon);
   });
 };
 

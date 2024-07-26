@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 // dnd-kit
 import { DndContext } from '@dnd-kit/core';
 // Components
+import PauseScreen from '../components/PauseScreen';
 import PokemonDisplay from '../components/PokemonDisplay';
 import UserSubmit from '../components/UserSubmit';
 import TypeButtons from '../components/TypeButtons';
@@ -73,25 +74,11 @@ function PokeGuesser() {
       updateTimer(setGame);
     }, 10); // Update every 10ms
   };
-  
+
   return (
     <>
       {/* Start popup window */}
-      {paused && (
-        <div className="absolute flex h-screen w-screen items-center justify-center bg-[rgb(255,255,255)]/[.75]">
-          <div className="flex flex-col items-center justify-center gap-y-10 rounded-[20px] border-4 border-black bg-[rgb(252,232,198)]/[1] p-10 shadow-2xl">
-            <h1 className="text-5xl">
-              Welcome to <span className="font-bold text-pokedex-red">POKÉGUESSER</span>
-            </h1>
-            <button
-              onClick={handleStartClick}
-              className="flex h-[100px] w-[225px] items-center justify-center rounded-[20px] border-4 border-black bg-pokedex-red drop-shadow-xl"
-            >
-              <h1 className="text-3xl font-bold text-white">Start</h1>
-            </button>
-          </div>
-        </div>
-      )}
+      {paused && <PauseScreen onClick={handleStartClick} />}
 
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">

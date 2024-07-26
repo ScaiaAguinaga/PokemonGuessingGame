@@ -1,5 +1,5 @@
 // React hooks
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 // dnd-kit
 import { DndContext } from '@dnd-kit/core';
 // Components
@@ -13,15 +13,26 @@ import { handleDragEnd } from '../utils/userSubmit';
 import { initializeSession } from '../utils/sessionUtils';
 // Icons
 import { IoBulbOutline } from 'react-icons/io5';
+import { setStartTime, updateTimer } from '../utils/gameUtils';
 
 function PokeGuesser() {
+  // Log of all pokemon and user submissions
+  const [pokemonLog, setPokemonLog] = useState([]);
+  // State variable for start screen
+  const [paused, setPaused] = useState(true);
+  // Ref to store interval ID
+  const timerRef = useRef(null);
+
   // State for managing game-related data
   const [game, setGame] = useState({
     pokemonIds: [],
     submitCount: 0,
     correctCount: 0,
     streak: 0,
-    time: '00:00:00',
+    startTime: 0,
+    currentTime: 0,
+    elapsedTime: 0,
+    displayTime: '00:00:00',
   });
 
   // State for managing current Pokémon data
@@ -46,26 +57,27 @@ function PokeGuesser() {
     userTypeResponse: [],
   });
 
-  // Log of all pokemon and user submissions
-  const [pokemonLog, setPokemonLog] = useState([]);
-  // State variable for start screen
-  const [isStartVisible, setIsStartVisible] = useState(true);
-
   // Handles game start button click
   const handleStartClick = () => {
-    // Removes popup window
-    setIsStartVisible(false);
+    // Unpause session
+    setPaused(false);
 
     // Preload the first two pokemon of the session
     initializeSession(setPokemon, setNextPokemon, game);
 
-    // Starts timer
-  };
+    // Set start point for timer
+    setStartTime(Date.now(), setGame);
 
+    // Set up interval to update the timer
+    timerRef.current = setInterval(() => {
+      updateTimer(setGame);
+    }, 10); // Update every 10ms
+  };
+  
   return (
     <>
       {/* Start popup window */}
-      {isStartVisible && (
+      {paused && (
         <div className="absolute flex h-screen w-screen items-center justify-center bg-[rgb(255,255,255)]/[.75]">
           <div className="flex flex-col items-center justify-center gap-y-10 rounded-[20px] border-4 border-black bg-[rgb(252,232,198)]/[1] p-10 shadow-2xl">
             <h1 className="text-5xl">
@@ -127,7 +139,7 @@ function PokeGuesser() {
                 {/* Displays log of past user answers */}
                 <PokemonLog pokeLog={pokemonLog} />
                 {/* Displays game and user stats */}
-                <GameStats game={game} setGame={setGame} />
+                <GameStats game={game} />
               </div>
             </div>
           </div>

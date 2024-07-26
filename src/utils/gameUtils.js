@@ -37,3 +37,29 @@ export const resetStreak = (setGame) => {
     streak: 0,
   }));
 };
+
+// Sets timer start time
+export const setStartTime = (time, setGame) => {
+  setGame((currentGame) => ({
+    ...currentGame,
+    startTime: time,
+  }));
+};
+
+// Updates time settings for game object
+export const updateTimer = (setGame) => {
+  setGame((currentGame) => {
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - currentGame.startTime;
+    return { ...currentGame, currentTime: currentTime, elapsedTime: elapsedTime, displayTime: formatTime(elapsedTime) };
+  });
+};
+
+// Formats milliseconds to HH:MM:SS
+export const formatTime = (milliseconds) => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+  const seconds = String(totalSeconds % 60).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};

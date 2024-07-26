@@ -22,7 +22,7 @@ function GameStats({ game }) {
       {/* Displays user playtime of current session */}
       <div className="col-span-2">
         <h2 className="text-4xl">
-          <span className="font-bold">TIME:</span> {game.time}
+          <span className="font-bold">TIME:</span> {game.displayTime}
         </h2>
       </div>
       {/* Buttons for user to pause or reset their session */}

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 // dnd-kit
 import { DndContext } from '@dnd-kit/core';
 // Components
+import StartScreen from '../components/StartScreen';
 import PauseScreen from '../components/PauseScreen';
 import PokemonDisplay from '../components/PokemonDisplay';
 import UserSubmit from '../components/UserSubmit';
@@ -20,7 +21,9 @@ function PokeGuesser() {
   // Log of all pokemon and user submissions
   const [pokemonLog, setPokemonLog] = useState([]);
   // State variable for start screen
-  const [paused, setPaused] = useState(true);
+  const [startPopup, setStartPopup] = useState(true);
+  // State variable for pause screen
+  const [isPaused, setIsPaused] = useState(false);
   // Ref to store interval ID
   const timerRef = useRef(null);
 
@@ -61,7 +64,7 @@ function PokeGuesser() {
   // Handles game start button click
   const handleStartClick = () => {
     // Unpause session
-    setPaused(false);
+    setStartPopup(false);
 
     // Preload the first two pokemon of the session
     initializeSession(setPokemon, setNextPokemon, game);
@@ -75,10 +78,26 @@ function PokeGuesser() {
     }, 10); // Update every 10ms
   };
 
+  const resumeGame = () => {
+    // Unrender pause pop-up window
+    setIsPaused(false);
+
+    // Update clock start time
+    setStartTime(Date.now() - game.elapsedTime, setGame);
+
+    // Create timer reference
+    timerRef.current = setInterval(() => {
+      updateTimer(setGame);
+    }, 10); // Update every 10ms
+  };
+
   return (
     <>
       {/* Start popup window */}
-      {paused && <PauseScreen onClick={handleStartClick} />}
+      {startPopup && <StartScreen onClick={handleStartClick} />}
+
+      {/* Pause popup window */}
+      {isPaused && <PauseScreen onClick={resumeGame} />}
 
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">
@@ -126,7 +145,7 @@ function PokeGuesser() {
                 {/* Displays log of past user answers */}
                 <PokemonLog pokeLog={pokemonLog} />
                 {/* Displays game and user stats */}
-                <GameStats game={game} />
+                <GameStats game={game} timerRef={timerRef} setIsPaused={setIsPaused} />
               </div>
             </div>
           </div>

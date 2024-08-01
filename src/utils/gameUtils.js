@@ -63,3 +63,7 @@ export const formatTime = (milliseconds) => {
   const seconds = String(totalSeconds % 60).padStart(2, '0');
   return `${hours}:${minutes}:${seconds}`;
 };
+
+export const resumeTimer = () => {
+  console.log('Timer Resumed!');
+};

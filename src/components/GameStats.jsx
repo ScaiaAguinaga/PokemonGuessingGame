@@ -1,7 +1,20 @@
 // Components
 import GameButton from './GameButton';
 
-function GameStats({ game }) {
+function GameStats({ game, timerRef, setIsPaused }) {
+  // On pause we want to clear the interval -> show pause screen -> resume button
+  // continues the timer by setting start time to Date.now() - elapsed time
+  // Then continues updating time with current time
+
+  const handlePauseClick = () => {
+    clearInterval(timerRef.current);
+    setIsPaused(true);
+  };
+
+  const handleResetClick = () => {
+    console.log('Game Reset');
+  };
+
   return (
     <div className="mt-5 grid h-full grid-cols-2 gap-y-5 text-center">
       {/* Displays user progress for current session */}
@@ -27,8 +40,8 @@ function GameStats({ game }) {
       </div>
       {/* Buttons for user to pause or reset their session */}
       <div className="col-span-2 flex items-end justify-center gap-10">
-        <GameButton label={'pause'} onClick={() => console.log('Game Paused')} />
-        <GameButton label={'Reset'} onClick={() => console.log('Game Reset')} />
+        <GameButton label={'pause'} onClick={handlePauseClick} />
+        <GameButton label={'Reset'} onClick={handleResetClick} />
       </div>
     </div>
   );

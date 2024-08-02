@@ -19,6 +19,19 @@ export const updatePokemonInfo = (data, setPokemon) => {
   }));
 };
 
+//
+export const emptySlot = (setPokemon) => {
+  setPokemon({
+    id: 0,
+    name: '',
+    types: [],
+    hdSprite: '',
+    pixelSprite: '',
+    // Used for displaying previous answers
+    userTypeResponse: [],
+  });
+};
+
 // Generates a random Pokemon ID that has not been used
 export const generatePokemonId = (game, preloadedIds = [0]) => {
   const { pokemonIds } = game;

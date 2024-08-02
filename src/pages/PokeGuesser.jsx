@@ -12,10 +12,11 @@ import PokemonLog from '../components/PokemonLog';
 import GameStats from '../components/GameStats';
 // Utilities
 import { handleDragEnd } from '../utils/userSubmit';
-import { initializeSession } from '../utils/sessionUtils';
+import { initializeSession, resumeSession } from '../utils/sessionUtils';
+import { setStartTime, updateTimer } from '../utils/gameUtils';
 // Icons
 import { IoBulbOutline } from 'react-icons/io5';
-import { setStartTime, updateTimer } from '../utils/gameUtils';
+import EndScreen from '../components/EndScreen';
 
 function PokeGuesser() {
   // Log of all pokemon and user submissions
@@ -37,6 +38,7 @@ function PokeGuesser() {
     currentTime: 0,
     elapsedTime: 0,
     displayTime: '00:00:00',
+    gameOver: false,
   });
 
   // State for managing current Pokémon data
@@ -78,26 +80,16 @@ function PokeGuesser() {
     }, 10); // Update every 10ms
   };
 
-  const resumeGame = () => {
-    // Unrender pause pop-up window
-    setIsPaused(false);
-
-    // Update clock start time
-    setStartTime(Date.now() - game.elapsedTime, setGame);
-
-    // Create timer reference
-    timerRef.current = setInterval(() => {
-      updateTimer(setGame);
-    }, 10); // Update every 10ms
-  };
-
   return (
     <>
       {/* Start popup window */}
       {startPopup && <StartScreen onClick={handleStartClick} />}
 
       {/* Pause popup window */}
-      {isPaused && <PauseScreen onClick={resumeGame} />}
+      {isPaused && <PauseScreen onClick={() => resumeSession(timerRef, game, setGame, setIsPaused, setStartTime)} />}
+
+      {/* Start popup window */}
+      {game.gameOver && <EndScreen onClick={handleStartClick} />}
 
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">

@@ -39,6 +39,14 @@ export const resetStreak = (setGame) => {
 };
 
 // Sets timer start time
+export const setGameOver = (state, setGame) => {
+  setGame((currentGame) => ({
+    ...currentGame,
+    gameOver: state,
+  }));
+};
+
+// Sets timer start time
 export const setStartTime = (time, setGame) => {
   setGame((currentGame) => ({
     ...currentGame,
@@ -62,8 +70,4 @@ export const formatTime = (milliseconds) => {
   const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
   const seconds = String(totalSeconds % 60).padStart(2, '0');
   return `${hours}:${minutes}:${seconds}`;
-};
-
-export const resumeTimer = () => {
-  console.log('Timer Resumed!');
 };

@@ -1,4 +1,5 @@
 // Components
+import { pauseSession } from '../utils/sessionUtils';
 import GameButton from './GameButton';
 
 function GameStats({ game, timerRef, setIsPaused }) {
@@ -7,8 +8,7 @@ function GameStats({ game, timerRef, setIsPaused }) {
   // Then continues updating time with current time
 
   const handlePauseClick = () => {
-    clearInterval(timerRef.current);
-    setIsPaused(true);
+    pauseSession(timerRef, setIsPaused);
   };
 
   const handleResetClick = () => {

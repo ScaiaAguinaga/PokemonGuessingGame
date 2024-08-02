@@ -1,6 +1,9 @@
 // Attempts to retrieve data of a given pokemon from PokeAPI
 // If successful, returns a JSON object containing pokemon data to be utilized
 export const fetchPokemonData = async (pokemonId) => {
+  if (pokemonId === 0) {
+    return;
+  }
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
 

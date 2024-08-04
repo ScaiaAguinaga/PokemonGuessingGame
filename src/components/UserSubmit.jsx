@@ -20,7 +20,7 @@ function UserSubmit({
   setPokemonLog,
   game,
   setGame,
-  setIsOver,
+  setShowGameOver,
 }) {
   const [clickedSubmit, setClickedSubmit] = useState(false);
   const userSubmission = pokemon.userTypeResponse;
@@ -41,7 +41,7 @@ function UserSubmit({
         setPokemonLog,
         game,
         setGame,
-        setIsOver,
+        setShowGameOver,
       );
       // Sets a timeout to reset clickedSubmit to false after 750 milliseconds
       setTimeout(() => {

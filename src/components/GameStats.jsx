@@ -1,18 +1,37 @@
 // Components
-import { pauseSession } from '../utils/sessionUtils';
+import { pauseSession, resetSession } from '../utils/sessionUtils';
 import GameButton from './GameButton';
 
-function GameStats({ game, timerRef, setIsPaused }) {
+function GameStats({
+  game,
+  timerRef,
+  setShowStart,
+  setShowPaused,
+  setShowGameOver,
+  setPokemon,
+  setNextPokemon,
+  setPokemonLog,
+  setGame,
+}) {
   // On pause we want to clear the interval -> show pause screen -> resume button
   // continues the timer by setting start time to Date.now() - elapsed time
   // Then continues updating time with current time
 
   const handlePauseClick = () => {
-    pauseSession(timerRef, setIsPaused);
+    pauseSession(timerRef, setShowPaused);
   };
 
-  const handleResetClick = () => {
-    console.log('Game Reset');
+  const handleResetClick = (
+    timerRef,
+    setShowStart,
+    setShowPaused,
+    setShowGameOver,
+    setPokemon,
+    setNextPokemon,
+    setPokemonLog,
+    setGame,
+  ) => {
+    resetSession(timerRef, setShowStart, setShowPaused, setShowGameOver, setPokemon, setNextPokemon, setPokemonLog, setGame);
   };
 
   return (
@@ -41,7 +60,21 @@ function GameStats({ game, timerRef, setIsPaused }) {
       {/* Buttons for user to pause or reset their session */}
       <div className="col-span-2 flex items-end justify-center gap-10">
         <GameButton label={'pause'} onClick={handlePauseClick} />
-        <GameButton label={'Reset'} onClick={handleResetClick} />
+        <GameButton
+          label={'restart'}
+          onClick={() => {
+            handleResetClick(
+              timerRef,
+              setShowStart,
+              setShowPaused,
+              setShowGameOver,
+              setPokemon,
+              setNextPokemon,
+              setPokemonLog,
+              setGame,
+            );
+          }}
+        />
       </div>
     </div>
   );

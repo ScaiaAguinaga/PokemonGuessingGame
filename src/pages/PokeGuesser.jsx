@@ -3,8 +3,9 @@ import { useRef, useState } from 'react';
 // dnd-kit
 import { DndContext } from '@dnd-kit/core';
 // Components
-import StartScreen from '../components/StartScreen';
-import PauseScreen from '../components/PauseScreen';
+import GameStart from '../components/GameStart';
+import GamePause from '../components/GamePause';
+import GameEnd from '../components/GameEnd';
 import PokemonDisplay from '../components/PokemonDisplay';
 import UserSubmit from '../components/UserSubmit';
 import TypeButtons from '../components/TypeButtons';
@@ -15,18 +16,19 @@ import { handleDragEnd } from '../utils/userSubmit';
 import { initializeSession, resumeSession } from '../utils/sessionUtils';
 import { setStartTime, updateTimer } from '../utils/gameUtils';
 // Icons
-import { IoBulbOutline } from 'react-icons/io5';
-import EndScreen from '../components/EndScreen';
+import GameInstructions from '../components/GameInstructions';
 
 function PokeGuesser() {
   // Log of all pokemon and user submissions
   const [pokemonLog, setPokemonLog] = useState([]);
-  // State variable for start screen
-  const [startPopup, setStartPopup] = useState(true);
-  // State variable for pause screen
-  const [isPaused, setIsPaused] = useState(false);
+  // State variable for start displaying screen
+  const [showStart, setShowStart] = useState(true);
+  // State variable for displaying instructions
+  const [showInstructions, setShowInstructions] = useState(false);
+  // State variable for pause displaying screen
+  const [showPaused, setShowPaused] = useState(false);
   // State variable for game end
-  const [isOver, setIsOver] = useState(false);
+  const [showGameOver, setShowGameOver] = useState(false);
   // Ref to store interval ID
   const timerRef = useRef(null);
 
@@ -66,8 +68,10 @@ function PokeGuesser() {
 
   // Handles game start button click
   const handleStartClick = () => {
-    // Unpause session
-    setStartPopup(false);
+    // Remove start popup
+    setShowStart(false);
+    // Remove instructions popup
+    setShowInstructions(false);
 
     // Preload the first two pokemon of the session
     initializeSession(setPokemon, setNextPokemon, game);
@@ -84,13 +88,46 @@ function PokeGuesser() {
   return (
     <div className="bg-site-bg bg-cover bg-center">
       {/* Start popup window */}
-      {startPopup && <StartScreen onClick={handleStartClick} />}
+      {showStart && (
+        <GameStart
+          handleStartClick={handleStartClick}
+          setShowStart={setShowStart}
+          setShowInstructions={setShowInstructions}
+        />
+      )}
+
+      {/* Instructions popup window */}
+      {showInstructions && <GameInstructions handleStartClick={handleStartClick} />}
 
       {/* Pause popup window */}
-      {isPaused && <PauseScreen onClick={() => resumeSession(timerRef, game, setGame, setIsPaused, setStartTime)} />}
+      {showPaused && (
+        <GamePause
+          onClick={() => resumeSession(timerRef, game, setGame, setShowPaused, setStartTime)}
+          timerRef={timerRef}
+          setShowPaused={setShowPaused}
+          setShowStart={setShowStart}
+          setShowGameOver={setShowGameOver}
+          setPokemon={setPokemon}
+          setNextPokemon={setNextPokemon}
+          setPokemonLog={setPokemonLog}
+          setGame={setGame}
+        />
+      )}
 
       {/* Game Over popup window */}
-      {isOver && <EndScreen game={game} />}
+      {showGameOver && (
+        <GameEnd
+          game={game}
+          timerRef={timerRef}
+          setShowPaused={setShowPaused}
+          setShowStart={setShowStart}
+          setShowGameOver={setShowGameOver}
+          setPokemon={setPokemon}
+          setNextPokemon={setNextPokemon}
+          setPokemonLog={setPokemonLog}
+          setGame={setGame}
+        />
+      )}
 
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">
@@ -117,7 +154,7 @@ function PokeGuesser() {
                     setPokemonLog={setPokemonLog}
                     game={game}
                     setGame={setGame}
-                    setIsOver={setIsOver}
+                    setShowGameOver={setShowGameOver}
                   />
                   {/* Displays all Pokemon types for user guesses */}
                   <TypeButtons />
@@ -131,16 +168,22 @@ function PokeGuesser() {
               {/* Container for right panel content */}
               <div className="flex h-full w-full flex-col">
                 <div className="mb-6 flex items-center justify-between">
-                  <h1 className="ml-[68px] flex-grow text-center text-5xl font-bold">POKÉLOG</h1>
-                  <IoBulbOutline
-                    className="ml-4 mr-5 h-12 w-12 cursor-pointer rounded-full bg-pokedex-red p-2 text-white"
-                    onClick={() => console.log('Hint pressed')}
-                  />
+                  <h1 className="flex-grow text-center text-5xl font-bold">POKÉLOG</h1>
                 </div>
                 {/* Displays log of past user answers */}
                 <PokemonLog pokeLog={pokemonLog} />
                 {/* Displays game and user stats */}
-                <GameStats game={game} timerRef={timerRef} setIsPaused={setIsPaused} />
+                <GameStats
+                  game={game}
+                  timerRef={timerRef}
+                  setShowPaused={setShowPaused}
+                  setShowStart={setShowStart}
+                  setShowGameOver={setShowGameOver}
+                  setPokemon={setPokemon}
+                  setNextPokemon={setNextPokemon}
+                  setPokemonLog={setPokemonLog}
+                  setGame={setGame}
+                />
               </div>
             </div>
           </div>

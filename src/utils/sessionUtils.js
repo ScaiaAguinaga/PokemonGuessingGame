@@ -1,4 +1,4 @@
-import { generatePokemonId, updatePokemonInfo } from './pokemonUtils';
+import { emptySlot, generatePokemonId, updatePokemonInfo } from './pokemonUtils';
 import { fetchPokemonData } from './pokeApi';
 import { updateTimer } from './gameUtils';
 
@@ -22,15 +22,15 @@ export const initializeSession = (setPokemon, setNextPokemon, game) => {
 };
 
 // Pauses session and timer
-export const pauseSession = (timerRef, setIsPaused) => {
+export const pauseSession = (timerRef, setShowPaused) => {
   clearInterval(timerRef.current);
-  setIsPaused(true);
+  setShowPaused(true);
 };
 
 // Resumes session and timer from pause state
-export const resumeSession = (timerRef, game, setGame, setIsPaused, setStartTime) => {
+export const resumeSession = (timerRef, game, setGame, setShowPaused, setStartTime) => {
   // Unrender pause pop-up window
-  setIsPaused(false);
+  setShowPaused(false);
 
   // Update clock start time
   setStartTime(Date.now() - game.elapsedTime, setGame);
@@ -41,10 +41,36 @@ export const resumeSession = (timerRef, game, setGame, setIsPaused, setStartTime
   }, 10); // Update every 10ms
 };
 
-export const resetSession = () => {
+export const resetSession = (
+  timerRef,
+  setShowStart,
+  setShowPaused,
+  setShowGameOver,
+  setPokemon,
+  setNextPokemon,
+  setPokemonLog,
+  setGame,
+) => {
   // Reset timer
-
-  // Clear pokemon, pokemon log
-
-  // Set pause,end,and start states
-}
+  clearInterval(timerRef.current);
+  // Clear popups and display start popup
+  setShowPaused(false);
+  setShowGameOver(false);
+  setShowStart(true);
+  // Reset preloaded pokemon
+  emptySlot(setPokemon);
+  emptySlot(setNextPokemon);
+  // Empty pokemon log
+  setPokemonLog([]);
+  // Reset game metrics
+  setGame({
+    pokemonIds: [],
+    submitCount: 0,
+    correctCount: 0,
+    streak: 0,
+    startTime: 0,
+    currentTime: 0,
+    elapsedTime: 0,
+    displayTime: '00:00:00',
+  });
+};

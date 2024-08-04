@@ -14,7 +14,7 @@ export const handleSubmit = (
   setPokemonLog,
   game,
   setGame,
-  setIsOver,
+  setShowGameOver,
 ) => {
   // Return early if the user hasn't inputted at least one type
   if (pokemon.userTypeResponse.length < 1) {
@@ -51,7 +51,7 @@ export const handleSubmit = (
     setPokemon(nextPokemon);
 
     // Mark the game as over and perform any end-of-game actions
-    setIsOver(true);
+    setShowGameOver(true);
     // Record stats
 
     return;

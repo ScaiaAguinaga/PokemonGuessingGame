@@ -44,7 +44,7 @@ export const handleSubmit = (
   handleReset(setPokemon);
 
   // Check if the game should end based on the number of submissions
-  if (pokemonLog.length + 1 >= 5) {
+  if (pokemonLog.length + 1 >= 151) {
     // Clear the timer
     clearInterval(timerRef.current);
     // Update the current Pokémon to the preloaded one
@@ -58,7 +58,7 @@ export const handleSubmit = (
   }
 
   // If this is the second-to-last submission, clear the next Pokémon slot to avoid API errors
-  if (pokemonLog.length + 1 >= 4) {
+  if (pokemonLog.length + 1 >= 150) {
     setPokemon(nextPokemon);
     emptySlot(setNextPokemon);
     return;

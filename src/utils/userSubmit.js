@@ -4,7 +4,18 @@ import * as gameUtils from './gameUtils';
 import { fetchPokemonData } from './pokeApi';
 
 // Handles user submission
-export const handleSubmit = (pokemon, setPokemon, nextPokemon, setNextPokemon, pokemonLog, setPokemonLog, game, setGame) => {
+export const handleSubmit = (
+  timerRef,
+  pokemon,
+  setPokemon,
+  nextPokemon,
+  setNextPokemon,
+  pokemonLog,
+  setPokemonLog,
+  game,
+  setGame,
+  setIsOver,
+) => {
   // Return early if the user hasn't inputted at least one type
   if (pokemon.userTypeResponse.length < 1) {
     return;
@@ -33,18 +44,21 @@ export const handleSubmit = (pokemon, setPokemon, nextPokemon, setNextPokemon, p
   handleReset(setPokemon);
 
   // Check if the game should end based on the number of submissions
-  if (pokemonLog.length + 1 >= 151) {
+  if (pokemonLog.length + 1 >= 5) {
+    // Clear the timer
+    clearInterval(timerRef.current);
     // Update the current Pokémon to the preloaded one
     setPokemon(nextPokemon);
 
     // Mark the game as over and perform any end-of-game actions
-    gameUtils.setGameOver(true, setGame);
+    setIsOver(true);
     // Record stats
+
     return;
   }
 
   // If this is the second-to-last submission, clear the next Pokémon slot to avoid API errors
-  if (pokemonLog.length + 1 >= 150) {
+  if (pokemonLog.length + 1 >= 4) {
     setPokemon(nextPokemon);
     emptySlot(setNextPokemon);
     return;

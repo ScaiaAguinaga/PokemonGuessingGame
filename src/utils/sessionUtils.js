@@ -40,3 +40,11 @@ export const resumeSession = (timerRef, game, setGame, setIsPaused, setStartTime
     updateTimer(setGame);
   }, 10); // Update every 10ms
 };
+
+export const resetSession = () => {
+  // Reset timer
+
+  // Clear pokemon, pokemon log
+
+  // Set pause,end,and start states
+}

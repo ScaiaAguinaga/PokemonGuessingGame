@@ -10,7 +10,18 @@ import { handleSubmit } from '../utils/userSubmit';
 // Icons
 import { MdCancel, MdCheckCircle } from 'react-icons/md';
 
-function UserSubmit({ pokemon, setPokemon, nextPokemon, setNextPokemon, pokemonLog, setPokemonLog, game, setGame }) {
+function UserSubmit({
+  timerRef,
+  pokemon,
+  setPokemon,
+  nextPokemon,
+  setNextPokemon,
+  pokemonLog,
+  setPokemonLog,
+  game,
+  setGame,
+  setIsOver,
+}) {
   const [clickedSubmit, setClickedSubmit] = useState(false);
   const userSubmission = pokemon.userTypeResponse;
 
@@ -20,7 +31,18 @@ function UserSubmit({ pokemon, setPokemon, nextPokemon, setNextPokemon, pokemonL
     if (!clickedSubmit) {
       setClickedSubmit(true);
       // Calls the handleSubmit function to process the submission
-      handleSubmit(pokemon, setPokemon, nextPokemon, setNextPokemon, pokemonLog, setPokemonLog, game, setGame);
+      handleSubmit(
+        timerRef,
+        pokemon,
+        setPokemon,
+        nextPokemon,
+        setNextPokemon,
+        pokemonLog,
+        setPokemonLog,
+        game,
+        setGame,
+        setIsOver,
+      );
       // Sets a timeout to reset clickedSubmit to false after 750 milliseconds
       setTimeout(() => {
         setClickedSubmit(false);

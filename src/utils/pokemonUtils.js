@@ -25,7 +25,7 @@ export const emptySlot = (setPokemon) => {
     id: 0,
     name: '',
     types: [],
-    hdSprite: '',
+    hdSprite: '/src/images/Pokeball-icon.png',
     pixelSprite: '',
     // Used for displaying previous answers
     userTypeResponse: [],

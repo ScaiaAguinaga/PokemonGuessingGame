@@ -39,14 +39,6 @@ export const resetStreak = (setGame) => {
 };
 
 // Sets timer start time
-export const setGameOver = (state, setGame) => {
-  setGame((currentGame) => ({
-    ...currentGame,
-    gameOver: state,
-  }));
-};
-
-// Sets timer start time
 export const setStartTime = (time, setGame) => {
   setGame((currentGame) => ({
     ...currentGame,

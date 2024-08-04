@@ -47,6 +47,7 @@ export default {
       },
       backgroundImage: {
         pokeball: "url('src/images/pokeball-wallpaper.jpg')", // Ensure the correct path to your image
+      'site-bg': "url('/src/images/Site-Background.jpg')"
       },
     },
   },

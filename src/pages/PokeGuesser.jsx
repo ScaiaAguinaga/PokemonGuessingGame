@@ -25,6 +25,8 @@ function PokeGuesser() {
   const [startPopup, setStartPopup] = useState(true);
   // State variable for pause screen
   const [isPaused, setIsPaused] = useState(false);
+  // State variable for game end
+  const [isOver, setIsOver] = useState(false);
   // Ref to store interval ID
   const timerRef = useRef(null);
 
@@ -38,7 +40,6 @@ function PokeGuesser() {
     currentTime: 0,
     elapsedTime: 0,
     displayTime: '00:00:00',
-    gameOver: false,
   });
 
   // State for managing current Pokémon data
@@ -46,7 +47,7 @@ function PokeGuesser() {
     id: 0,
     name: '',
     types: [],
-    hdSprite: '',
+    hdSprite: '/src/images/Pokeball-icon.png',
     pixelSprite: '',
     // Used for displaying previous answers
     userTypeResponse: [],
@@ -57,7 +58,7 @@ function PokeGuesser() {
     id: 0,
     name: '',
     types: [],
-    hdSprite: '',
+    hdSprite: '/src/images/Pokeball-icon.png',
     pixelSprite: '',
     // Used for displaying previous answers
     userTypeResponse: [],
@@ -81,21 +82,21 @@ function PokeGuesser() {
   };
 
   return (
-    <>
+    <div className="bg-site-bg bg-cover bg-center">
       {/* Start popup window */}
       {startPopup && <StartScreen onClick={handleStartClick} />}
 
       {/* Pause popup window */}
       {isPaused && <PauseScreen onClick={() => resumeSession(timerRef, game, setGame, setIsPaused, setStartTime)} />}
 
-      {/* Start popup window */}
-      {game.gameOver && <EndScreen onClick={handleStartClick} />}
+      {/* Game Over popup window */}
+      {isOver && <EndScreen game={game} />}
 
       {/* Styling for pokedex design */}
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="grid grid-cols-2 gap-[30px]">
           {/* Left panel */}
-          <div className="h-[1000px] w-[625px] rounded-[20px] bg-pokedex-red p-6">
+          <div className="h-[1000px] w-[625px] rounded-[20px] bg-pokedex-red p-6 shadow-2xl outline outline-4 outline-black">
             <div className="h-full w-full rounded-[20px] bg-cream px-4 py-6">
               {/* Container for left panel content */}
               <div className="flex h-full w-full flex-col">
@@ -107,6 +108,7 @@ function PokeGuesser() {
                 <DndContext onDragEnd={(event) => handleDragEnd(event, pokemon, setPokemon)}>
                   {/* Droppable zone to clear or submit your guess */}
                   <UserSubmit
+                    timerRef={timerRef}
                     pokemon={pokemon}
                     setPokemon={setPokemon}
                     nextPokemon={nextPokemon}
@@ -115,6 +117,7 @@ function PokeGuesser() {
                     setPokemonLog={setPokemonLog}
                     game={game}
                     setGame={setGame}
+                    setIsOver={setIsOver}
                   />
                   {/* Displays all Pokemon types for user guesses */}
                   <TypeButtons />
@@ -123,7 +126,7 @@ function PokeGuesser() {
             </div>
           </div>
           {/* Right panel */}
-          <div className="h-[1000px] w-[625px] rounded-[20px] bg-pokedex-red p-6">
+          <div className="h-[1000px] w-[625px] rounded-[20px] bg-pokedex-red p-6 shadow-2xl outline outline-4 outline-black">
             <div className="flex h-full w-full flex-col rounded-[20px] bg-cream px-4 py-6">
               {/* Container for right panel content */}
               <div className="flex h-full w-full flex-col">
@@ -143,7 +146,7 @@ function PokeGuesser() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
